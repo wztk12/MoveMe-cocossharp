@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using CocosSharp;
 using CocosDenshion;
 
-namespace Move_me_
+namespace MoveMe
 {
     public class AppDelegate : CCApplicationDelegate
     {
@@ -14,7 +14,7 @@ namespace Move_me_
             var windowSize = mainWindow.WindowSizeInPixels;
 
             var desiredWidth = 1024.0f;
-            var desiredHeight = 768.0f;
+            var desiredHeight = 798.0f;
 
             // This will set the world bounds to be (0,0, w, h)
             // CCSceneResolutionPolicy.ShowAll will ensure that the aspect ratio is preserved
@@ -33,6 +33,8 @@ namespace Move_me_
                 application.ContentSearchPaths.Add("ld");
                 CCSprite.DefaultTexelToContentSizeRatio = 1.0f;
             }
+
+            CCScene.SetDefaultDesignResolution(380, 240, CCSceneResolutionPolicy.ShowAll);
 
             var scene = new CCScene(mainWindow);
             var introLayer = new IntroLayer();

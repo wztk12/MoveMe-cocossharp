@@ -3,23 +3,15 @@ using System.Collections.Generic;
 using CocosSharp;
 using Microsoft.Xna.Framework;
 
-namespace Move_me_
+namespace MoveMe
 {
-    public class IntroLayer : CCLayerColor
+    public class IntroLayer : CCLayer
     {
+        CCTileMap tilemap;
 
-        // Define a label variable
-        CCLabel label;
-
-        public IntroLayer() : base(CCColor4B.Blue)
+        public IntroLayer() 
         {
-
-            // create and initialize a Label
-            label = new CCLabel("Hello CocosSharp", "fonts/MarkerFelt", 22, CCLabelFormat.SpriteFont);
-
-            // add the label as a child to this Layer
-            AddChild(label);
-
+            
         }
 
         protected override void AddedToScene()
@@ -29,13 +21,13 @@ namespace Move_me_
             // Use the bounds to layout the positioning of our drawable assets
             var bounds = VisibleBoundsWorldspace;
 
-            // position the label on the center of the screen
-            label.Position = bounds.Center;
-
             // Register for touch events
             var touchListener = new CCEventListenerTouchAllAtOnce();
             touchListener.OnTouchesEnded = OnTouchesEnded;
             AddEventListener(touchListener, this);
+
+            tilemap = new CCTileMap("maps/map1.tmx");
+            this.AddChild(tilemap);
         }
 
         void OnTouchesEnded(List<CCTouch> touches, CCEvent touchEvent)

@@ -13,10 +13,10 @@ using Microsoft.Xna.Framework;
 
 using CocosSharp;
 
-namespace Move_me_
+namespace MoveMe
 {
 
-    [Activity(Label = "Move_me_"
+    [Activity(Label = "MoveMe"
         , MainLauncher = true
         , Icon = "@drawable/icon"
         , Theme = "@style/Theme.Splash"

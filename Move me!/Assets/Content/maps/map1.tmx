@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="40" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="1">
+ <tileset firstgid="1" source="mastersheet.tsx"/>
+ <layer id="1" name="bg" width="40" height="20">
+  <data encoding="base64" compression="zlib">
+   eJy91AduwjAUgGHDQdh7XIm9S67EHl1ciT26uEN/RFBdRBo3g0ifFCn287Pfc9pCCA05Czq6LnroY4AhRhhjgike8YRnvOAVMxNFaVzHAjt5qYxpGpyHk3nI7/89R83BPE77y6Ogx5L3bCduQa9zCWVUrtaS36/HVVFDXRj3pt393+p7lXwa4twfrT/ycaIuchwrd9gsN7s5ymOt3GG3/i+azql4ZmOtrjPHAkussMYGW+ywxwFveMcHPvGF4x3m+zxC+BFAECGEEUEUMcSRQBIppJFB1uP+/BzyKKCIEsqooIoa6migiRYe0IZ2h/kdE3PdAkusMLJppjP6fpTMTfi8Z34EEEQIYUQQRQxxJJBECmlkkPX+Xk9F1vvDp8BOblbMpDM2q6+buuihjwGGen3HmGCqUF+nnZ5bPb3GBlvssMfBo1Zft6j0zT3XstKjlzvqVPzL/XMq5jdMKpMJ
+  </data>
+ </layer>
+ <layer id="2" name="fg1" width="40" height="20">
+  <data encoding="base64" compression="zlib">
+   eJztkdENgDAIRJnA7qFOLh3OEdRE0+YCSPxRk3vJ/ViEVypCCCGEEPJ/xiIynZnL2zbfRvf9LF3U2NfxrUIdRpNZhzYT+1ouV01fh9x54f+WL55FPaO+T/28+RkXb3fVmeG9byaRP3pb98J+G9MFaZg=
+  </data>
+ </layer>
+ <layer id="3" name="fg2" width="40" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjIJRMApGwSgY+kCQi4FBCIqFuQbaNRDAwgqhbzAPrDuYWFH5QlyoGFt4CXJhqqMXHorAnQUVDzawmhMVDyQAANA4CUg=
+  </data>
+ </layer>
+</map>
