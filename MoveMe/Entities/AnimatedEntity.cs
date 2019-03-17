@@ -6,6 +6,7 @@ namespace MoveMe.Entities
 {
     public class AnimatedEntity : CCNode
     {
+        public CCSprite sprite;
         public AnimatedEntity()
         {
 
@@ -22,7 +23,14 @@ namespace MoveMe.Entities
             return animation;
 
         }
-        
+
+        public CCRect BoundingBoxWorld
+        {
+            get
+            {
+                return this.sprite.BoundingBoxTransformedToWorld;
+            }
+        }
     }
     
 
