@@ -2,16 +2,15 @@ using System;
 using System.Collections.Generic;
 using CocosSharp;
 using Microsoft.Xna.Framework;
+using MoveMe.Entities;
 
 namespace MoveMe
 {
     public class IntroLayer : CCLayer
     {
         CCTileMap tilemap;
-        CCSprite guy;
-        CCAnimation walkAnim;
-        CCRepeatForever walkRepeat;
-
+        Player player = new Player();
+        
 
 
 
@@ -32,17 +31,11 @@ namespace MoveMe
             touchListener.OnTouchesEnded = OnTouchesEnded;
             AddEventListener(touchListener, this);
             tilemap = new CCTileMap("maps/map1.tmx");
-            var spritesheet = new CCSpriteSheet("animations/runl.plist");
-            var animationFrames = spritesheet.Frames.FindAll((x) => x.TextureFilename.StartsWith("runl"));
-
-            walkAnim = new CCAnimation(animationFrames, 0.1f);
-            walkRepeat = new CCRepeatForever(new CCAnimate(walkAnim));
-            guy = new CCSprite(animationFrames[0]);
-            
             this.AddChild(tilemap);
-            this.AddChild(guy);
-            guy.PositionX = 20;
-            guy.PositionY = 100;
+            player.sprite.Position = new CCPoint(20, 72);
+            this.AddChild(player.sprite);
+            player.sprite.AddAction(player.idleRight.Action);
+            
             
             
         }
@@ -52,7 +45,6 @@ namespace MoveMe
             if (touches.Count > 0)
             {
                 // Perform touch handling here
-                guy.AddAction(walkRepeat);
             }
         }
     }

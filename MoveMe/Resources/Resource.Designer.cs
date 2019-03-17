@@ -9,9 +9,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Android.Runtime.ResourceDesignerAttribute("Move_me_.Resource", IsApplication=true)]
+[assembly: global::Android.Runtime.ResourceDesignerAttribute("MoveMe.Resource", IsApplication=true)]
 
-namespace Move_me_
+namespace MoveMe
 {
 	
 	

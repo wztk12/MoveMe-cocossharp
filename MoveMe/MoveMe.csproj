@@ -9,8 +9,8 @@
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Move_me_</RootNamespace>
-    <AssemblyName>Move me!</AssemblyName>
+    <RootNamespace>MoveMe</RootNamespace>
+    <AssemblyName>MoveMe</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <AndroidApplication>true</AndroidApplication>
     <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
@@ -66,6 +66,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\AnimatedEntity.cs" />
+    <Compile Include="Entities\Animation.cs" />
+    <Compile Include="Entities\Player.cs" />
     <Compile Include="Program.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -78,6 +81,9 @@
     <AndroidAsset Include="Assets\Content\fonts\MarkerFelt-22.xnb" />
     <AndroidAsset Include="Assets\Content\maps\map1.tmx" />
     <AndroidAsset Include="Assets\Content\animations\runr.plist" />
+    <AndroidAsset Include="Assets\Content\animations\idlel.plist" />
+    <AndroidAsset Include="Assets\Content\animations\idler.plist" />
+    <AndroidAsset Include="Assets\Content\animations\runl.plist" />
     <None Include="packages.config" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
@@ -116,6 +122,15 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\Content\animations\runr.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\Content\animations\idlel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\Content\animations\idler.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\Content\animations\runl.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
