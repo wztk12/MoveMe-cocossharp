@@ -77,7 +77,7 @@
   <ItemGroup>
     <AndroidAsset Include="Assets\Content\fonts\MarkerFelt-22.xnb" />
     <AndroidAsset Include="Assets\Content\maps\map1.tmx" />
-    <AndroidAsset Include="Assets\Content\animations\runl.plist" />
+    <AndroidAsset Include="Assets\Content\animations\runr.plist" />
     <None Include="packages.config" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
@@ -115,7 +115,7 @@
     <AndroidAsset Include="Assets\Content\maps\mastersheet.tsx" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\Content\animations\runl.png" />
+    <AndroidAsset Include="Assets\Content\animations\runr.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
