@@ -34,22 +34,21 @@ namespace MoveMe
             player.sprite.Position = new CCPoint(20, 74);
             this.AddChild(player.sprite);
             player.sprite.AddAction(player.idleRight.Action);
-            bool intersects = false;
-            foreach(CCRect rect in GetGroundTiles(tilemap)){
-                if (HandleWorldCollision(rect))
-                {
-                    intersects = true;
-                }
-            }
+            bool intersects = HandleWorldCollision(GetGroundTiles(tilemap), player);
             
             CCLabel label = new CCLabel(intersects.ToString(), "fonts/MarkerFelt", 22, CCLabelFormat.SpriteFont);
             label.Position = new CCPoint(40, 100);
             this.AddChild(label);
             
         }
-        bool HandleWorldCollision(CCRect tile)
+        bool HandleWorldCollision(List<CCRect> tiles, AnimatedEntity entity)
         {
-            return tile.IntersectsRect(player.BoundingBoxWorld);
+            bool intersects = false;
+            foreach (var tile in tiles)
+            {
+                if (tile.IntersectsRect(entity.BoundingBoxWorld)) intersects = true;
+            }
+            return intersects
         }
 
         List<CCRect> GetGroundTiles(CCTileMap tileMap)
