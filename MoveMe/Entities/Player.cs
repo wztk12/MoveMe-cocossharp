@@ -4,7 +4,8 @@ namespace MoveMe.Entities
 {
     public class Player : AnimatedEntity
     {
-        public Animation idleRight, idleLeft, runRight, runLeft;
+        
+        public CCSprite jump, fall;
 
         public Player()
         {
@@ -13,8 +14,13 @@ namespace MoveMe.Entities
             idleLeft = GetAnimation("idlel");
             runRight = GetAnimation("runr");
             runLeft = GetAnimation("runl");
-            
-            sprite = new CCSprite(idleRight.Frames[0]);
+
+            jump = new CCSprite("images/playerJump.png");
+            fall = new CCSprite("images/playerFall.png");
+            defaultSprite = new CCSprite(idleRight.Frames[0]);
+            currentAnimation = runRight;
+            sprite = defaultSprite;
+            this.velocityY = -8;
 
         }
         

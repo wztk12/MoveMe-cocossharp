@@ -29,7 +29,7 @@ namespace MoveMe.Entities
             {
                 if(Intersects(tile, entity))
                 {
-                    entity.gravity = 0;
+                    entity.velocityY = 0;
                 }
             }
         }

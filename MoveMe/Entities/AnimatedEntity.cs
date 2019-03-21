@@ -6,11 +6,13 @@ namespace MoveMe.Entities
 {
     public class AnimatedEntity : CCNode
     {
-        public CCSprite sprite;
-        public float gravity = -80;
+        public Animation currentAnimation = new Animation();
+        public CCSprite sprite, defaultSprite;
+        public float velocityX, velocityY = 0;
+        public Animation idleRight, idleLeft, runRight, runLeft;
+
         public AnimatedEntity()
         {
-
         }
 
         protected Animation GetAnimation(string filename)
@@ -32,7 +34,35 @@ namespace MoveMe.Entities
             }
         }
 
+        
+        public void ApplyPhysics(float seconds)
+        {
+            this.sprite.PositionX += seconds * this.velocityX;
+            this.sprite.PositionY += seconds * this.velocityY;
+            this.AssignAnimation(seconds);
+        }
 
+        void AssignAnimation(float seconds)
+        {
+            Animation animationToAssign = new Animation();
+            bool isFalling = this.velocityY < 0;
+            bool isStanding = this.velocityY == 0;
+            bool isJumping = this.velocityY > 0;
+            bool isMovingRight = this.velocityX > 0;
+            bool isMovingLeft = this.velocityX < 0;
+            bool isIdle = this.velocityX == 0;
+            if(isStanding && isIdle)
+            {
+                animationToAssign = idleRight;
+            }
+            if (!currentAnimation.Equals(animationToAssign) && !animationToAssign.Equals(new Animation()))
+            {
+                this.currentAnimation = animationToAssign;
+                this.sprite.AddAction(currentAnimation.Action);
+            }
+
+            
+        }
     }
     
 

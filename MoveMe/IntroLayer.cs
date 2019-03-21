@@ -14,7 +14,6 @@ namespace MoveMe
 
         public IntroLayer() 
         {
-            
         }
 
         protected override void AddedToScene()
@@ -34,7 +33,8 @@ namespace MoveMe
 
             player.sprite.Position = new CCPoint(20, 120);
             this.AddChild(player.sprite);
-            player.sprite.AddAction(player.idleRight.Action);
+            //player.sprite.AddAction(player.currentAnimation.Action);
+            //player.sprite.AddAction(player.idleRight.Action);
             Schedule(ApplyGravity, 0.1f);
             
         }
@@ -42,7 +42,7 @@ namespace MoveMe
         void ApplyGravity(float seconds)
         {
             engine.LevelCollision(engine.GroundTiles, player);
-            player.sprite.PositionY += 0.1f * seconds * player.gravity;
+            player.ApplyPhysics(seconds);
         }
         
 
@@ -50,6 +50,7 @@ namespace MoveMe
         {
             if (touches.Count > 0)
             {
+                
                 // Perform touch handling here
             }
         }
