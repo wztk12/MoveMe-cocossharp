@@ -58,6 +58,7 @@ namespace MoveMe.Entities
             if (!currentAnimation.Equals(animationToAssign) && !animationToAssign.Equals(new Animation()))
             {
                 this.currentAnimation = animationToAssign;
+                this.sprite.StopAllActions();
                 this.sprite.AddAction(currentAnimation.Action);
             }
 

@@ -33,8 +33,7 @@ namespace MoveMe
 
             player.sprite.Position = new CCPoint(20, 120);
             this.AddChild(player.sprite);
-            //player.sprite.AddAction(player.currentAnimation.Action);
-            //player.sprite.AddAction(player.idleRight.Action);
+            
             Schedule(ApplyGravity, 0.1f);
             
         }
@@ -43,6 +42,7 @@ namespace MoveMe
         {
             engine.LevelCollision(engine.GroundTiles, player);
             player.ApplyPhysics(seconds);
+            player.JumpingAnimations(seconds);
         }
         
 
