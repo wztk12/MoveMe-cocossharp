@@ -42,7 +42,6 @@ namespace MoveMe
         {
             engine.LevelCollision(engine.GroundTiles, player);
             player.ApplyPhysics(seconds);
-            player.JumpingAnimations(seconds);
         }
         
 

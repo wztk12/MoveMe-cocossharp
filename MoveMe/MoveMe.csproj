@@ -85,7 +85,8 @@
     <AndroidAsset Include="Assets\Content\animations\idlel.plist" />
     <AndroidAsset Include="Assets\Content\animations\idler.plist" />
     <AndroidAsset Include="Assets\Content\animations\runl.plist" />
-    <AndroidAsset Include="Assets\Content\animations\fall.plist" />
+    <AndroidAsset Include="Assets\Content\animations\fallLeft.plist" />
+    <AndroidAsset Include="Assets\Content\animations\fallRight.plist" />
     <None Include="packages.config" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
@@ -137,7 +138,10 @@
     <AndroidAsset Include="Assets\Content\images\playerFall.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\Content\animations\fall.png" />
+    <AndroidAsset Include="Assets\Content\animations\fallLeft.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\Content\animations\fallRight.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

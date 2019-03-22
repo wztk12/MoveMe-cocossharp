@@ -9,7 +9,7 @@ namespace MoveMe.Entities
         public Animation currentAnimation = new Animation();
         public CCSprite sprite, defaultSprite;
         public float velocityX, velocityY = 0;
-        public Animation idleRight, idleLeft, runRight, runLeft;
+        public Animation idleRight, idleLeft, runRight, runLeft, fallRight, fallLeft, jump;
 
         public AnimatedEntity()
         {
@@ -39,10 +39,10 @@ namespace MoveMe.Entities
         {
             this.sprite.PositionX += seconds * this.velocityX;
             this.sprite.PositionY += seconds * this.velocityY;
-            this.AssignAnimation(seconds);
+            this.SelectAnimation(seconds);
         }
 
-        void AssignAnimation(float seconds)
+        void SelectAnimation(float seconds)
         {
             Animation animationToAssign = new Animation();
             bool isFalling = this.velocityY < 0;
@@ -51,20 +51,32 @@ namespace MoveMe.Entities
             bool isMovingRight = this.velocityX > 0;
             bool isMovingLeft = this.velocityX < 0;
             bool isIdle = this.velocityX == 0;
-            if(isStanding && isIdle)
+            if (isStanding && isIdle && !currentAnimation.Equals(idleRight))
             {
                 animationToAssign = idleRight;
             }
-            if (!currentAnimation.Equals(animationToAssign) && !animationToAssign.Equals(new Animation()))
+            else if(isFalling && !currentAnimation.Equals(fallRight))
+            {
+                animationToAssign = fallRight;
+            }
+            if (!animationToAssign.Equals(new Animation()))
+            {
+                AssignAnimation(animationToAssign);
+            }
+
+        }
+
+        void AssignAnimation(Animation animationToAssign)
+        {
+            if (!currentAnimation.Equals(animationToAssign))
             {
                 this.currentAnimation = animationToAssign;
                 this.sprite.StopAllActions();
                 this.sprite.AddAction(currentAnimation.Action);
             }
-
-            
         }
     }
+
     
 
                 

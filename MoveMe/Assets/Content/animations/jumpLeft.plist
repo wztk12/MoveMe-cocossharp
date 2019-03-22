@@ -4,18 +4,18 @@
     <dict>
         <key>frames</key>
         <dict>
-            <key>landing.png</key>
+            <key>jumpLeft.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
                 <key>spriteOffset</key>
                 <string>{0,0}</string>
                 <key>spriteSize</key>
-                <string>{20,35}</string>
+                <string>{17,34}</string>
                 <key>spriteSourceSize</key>
-                <string>{20,35}</string>
+                <string>{17,34}</string>
                 <key>textureRect</key>
-                <string>{{1,1},{20,35}}</string>
+                <string>{{1,1},{17,34}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
@@ -29,13 +29,13 @@
             <key>premultiplyAlpha</key>
             <false/>
             <key>realTextureFileName</key>
-            <string>fall.png</string>
+            <string>jumpLeft.png</string>
             <key>size</key>
-            <string>{22,37}</string>
+            <string>{19,36}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:e976d94366dec70255e435b42b5276ab:b61970e15761d1a64e8d193798c8dfa4:1019844efcac5c9a306b32841df54365$</string>
+            <string>$TexturePacker:SmartUpdate:910f965a6bcb2fa6eb59a7d549290452:b9db2f707d63f5ae28597fdc487b23d6:40dd9b07a9bf2d03d3961efccdfc1d78$</string>
             <key>textureFileName</key>
-            <string>fall.png</string>
+            <string>jumpLeft.png</string>
         </dict>
     </dict>
 </plist>
