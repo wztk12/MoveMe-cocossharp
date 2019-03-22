@@ -30,6 +30,10 @@ namespace MoveMe.Entities
                 if(Intersects(tile, entity))
                 {
                     entity.velocityY = 0;
+                    CCVector2 separatingVector = GetSeparatingVector(entity.BoundingBoxWorld, tile);
+                    entity.sprite.PositionX += separatingVector.X;
+                    entity.sprite.PositionY += separatingVector.Y;
+
                 }
             }
         }
@@ -98,5 +102,49 @@ namespace MoveMe.Entities
             }
             return new CCRect();
         }
+
+        CCVector2 GetSeparatingVector(CCRect first, CCRect second)
+        {
+            // Default to no separation
+            CCVector2 separation = CCVector2.Zero;
+
+            // Only calculate separation if the rectangles intersect
+            if (first.IntersectsRect(second))
+            {
+                // The intersectionRect returns the rectangle produced
+                // by overlapping the two rectangles
+                var intersectionRect = first.Intersection(second);
+
+                // Separation should occur by moving the minimum distance
+                // possible. We do this by checking which is smaller: width or height?
+                bool separateHorizontally = intersectionRect.Size.Width < intersectionRect.Size.Height;
+
+                if (separateHorizontally)
+                {
+                    separation.X = intersectionRect.Size.Width;
+                    // Since separation is from the perspective
+                    // of 'first', the value should be negative if
+                    // the first is to the left of the second.
+                    if (first.Center.X < second.Center.X)
+                    {
+                        separation.X *= -1;
+                    }
+                    separation.Y = 0;
+                }
+                else
+                {
+                    separation.X = 0;
+
+                    separation.Y = intersectionRect.Size.Height;
+                    if (first.Center.Y < second.Center.Y)
+                    {
+                        separation.Y *= -1;
+                    }
+                }
+            }
+
+            return separation;
+        }
+
     }
 }

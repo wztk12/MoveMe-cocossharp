@@ -48,7 +48,7 @@ namespace MoveMe.Entities
             bool isFalling = this.velocityY < 0;
             bool isStanding = this.velocityY == 0;
             bool isJumping = this.velocityY > 0;
-            bool isMovingRight = this.velocityX > 0;
+            bool isMovingRight = this.velocityX >= 0;
             bool isMovingLeft = this.velocityX < 0;
             bool isIdle = this.velocityX == 0;
             if (isStanding && isIdle && !currentAnimation.Equals(idleRight))

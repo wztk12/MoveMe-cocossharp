@@ -4,12 +4,8 @@ namespace MoveMe.Entities
 {
     public class Player : AnimatedEntity
     {
-        
-
         public Player()
         {
-            
-
             idleRight = GetAnimation("idler");
             idleLeft = GetAnimation("idlel");
             runRight = GetAnimation("runr");
@@ -18,18 +14,8 @@ namespace MoveMe.Entities
             defaultSprite = new CCSprite(idleRight.Frames[0]);
             sprite = defaultSprite;
             this.velocityY = -8;
-
         }
 
-        public void JumpingAnimations(float seconds)
-        {
-            if (velocityY < 0 && !currentAnimation.Equals(fallRight))
-            {
-                currentAnimation = fallRight;
-                this.sprite.StopAllActions();
-                this.sprite.AddAction(currentAnimation.Action);
-            }
-        }
 
     }
 }
