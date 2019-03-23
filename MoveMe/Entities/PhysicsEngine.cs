@@ -5,6 +5,7 @@ namespace MoveMe.Entities
 {
     class PhysicsEngine
     {
+        private float gravity = 10;
         public CCTileMap Tilemap
         {
             get;
@@ -30,12 +31,18 @@ namespace MoveMe.Entities
                 if(Intersects(tile, entity))
                 {
                     entity.velocityY = 0;
+                    entity.isStanding = true;
                     CCVector2 separatingVector = GetSeparatingVector(entity.BoundingBoxWorld, tile);
                     entity.sprite.PositionX += separatingVector.X;
                     entity.sprite.PositionY += separatingVector.Y;
 
                 }
             }
+        }
+
+        public void Gravity(float seconds, AnimatedEntity entity)
+        {
+            if(!entity.isStanding) entity.velocityY += seconds * -gravity;
         }
 
         bool Intersects(CCRect tile, AnimatedEntity entity)

@@ -13,7 +13,6 @@ namespace MoveMe.Entities
             fallRight = GetAnimation("fallRight");
             defaultSprite = new CCSprite(idleRight.Frames[0]);
             sprite = defaultSprite;
-            this.velocityY = -8;
         }
 
 
