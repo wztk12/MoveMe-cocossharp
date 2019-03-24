@@ -1,11 +1,13 @@
 ﻿using CocosSharp;
+using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 
 namespace MoveMe.Entities
 {
     class PhysicsEngine
     {
-        private float gravity = 10;
+        private float gravity = 140;
         public CCTileMap Tilemap
         {
             get;
@@ -42,7 +44,7 @@ namespace MoveMe.Entities
 
         public void Gravity(float seconds, AnimatedEntity entity)
         {
-            if(!entity.isStanding) entity.velocityY += seconds * -gravity;
+            if (!entity.isStanding && entity.velocityY>-10) entity.velocityY += (float)Math.Pow(seconds / 2, 2) * -gravity;
         }
 
         bool Intersects(CCRect tile, AnimatedEntity entity)

@@ -25,7 +25,7 @@ namespace MoveMe
 
             // Register for touch events
             var touchListener = new CCEventListenerTouchAllAtOnce();
-            touchListener.OnTouchesEnded = OnTouchesEnded;
+            touchListener.OnTouchesBegan = OnTouchesBegan;
             AddEventListener(touchListener, this);
             tilemap = engine.Tilemap;
             tilemap.Antialiased = false;
@@ -34,24 +34,27 @@ namespace MoveMe
             player.sprite.Position = new CCPoint(20, 120);
             this.AddChild(player.sprite);
             
-            Schedule(ApplyGravity, 0.1f);
+            Schedule(ApplyPhysics, 0.1f);
             
         }
 
-        void ApplyGravity(float seconds)
+        void ApplyPhysics(float seconds)
         {
             engine.LevelCollision(engine.GroundTiles, player);
-            player.ApplyPhysics(seconds);
+            player.ApplyMovement(seconds);
             engine.Gravity(seconds, player);
         }
         
 
-        void OnTouchesEnded(List<CCTouch> touches, CCEvent touchEvent)
+        void OnTouchesBegan(List<CCTouch> touches, CCEvent touchEvent)
         {
             if (touches.Count > 0)
             {
-                
-                // Perform touch handling here
+                if (player.isStanding)
+                {
+                    player.velocityY = 10;
+                    player.isStanding = false;
+                }
             }
         }
     }

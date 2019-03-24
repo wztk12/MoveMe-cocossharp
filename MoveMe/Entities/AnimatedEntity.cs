@@ -10,7 +10,7 @@ namespace MoveMe.Entities
         public CCSprite sprite, defaultSprite;
         public float velocityX, velocityY = 0;
         public bool isStanding = false;
-        public Animation idleRight, idleLeft, runRight, runLeft, fallRight, fallLeft, jump;
+        public Animation idleRight, idleLeft, runRight, runLeft, fallRight, fallLeft, jumpRight, jumpLeft;
 
         public AnimatedEntity()
         {
@@ -36,7 +36,7 @@ namespace MoveMe.Entities
         }
 
         
-        public void ApplyPhysics(float seconds)
+        public void ApplyMovement(float seconds)
         {
             this.sprite.PositionX += seconds * this.velocityX;
             this.sprite.PositionY += seconds * this.velocityY;
@@ -59,6 +59,10 @@ namespace MoveMe.Entities
             else if(isFalling && !currentAnimation.Equals(fallRight))
             {
                 animationToAssign = fallRight;
+            }
+            else if(isJumping && !currentAnimation.Equals(jumpRight))
+            {
+                animationToAssign = jumpRight;
             }
             if (!animationToAssign.Equals(new Animation()))
             {
