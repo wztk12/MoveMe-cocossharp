@@ -10,6 +10,7 @@ namespace MoveMe
     {
         CCTileMap tilemap;
         Player player = new Player();
+        ButtonJump button = new ButtonJump();
         PhysicsEngine engine = new PhysicsEngine("map1");
 
         public IntroLayer() 
@@ -33,6 +34,9 @@ namespace MoveMe
 
             player.sprite.Position = new CCPoint(20, 120);
             this.AddChild(player.sprite);
+
+            button.sprite.Position = new CCPoint(40, 40);
+            this.AddChild(button.sprite);
             
             Schedule(ApplyPhysics, 0.1f);
             
@@ -50,11 +54,7 @@ namespace MoveMe
         {
             if (touches.Count > 0)
             {
-                if (player.isStanding)
-                {
-                    player.velocityY = 10;
-                    player.isStanding = false;
-                }
+                button.HandlePress(touches[0], player);
             }
         }
     }

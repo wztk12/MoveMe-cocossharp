@@ -4,6 +4,7 @@ namespace MoveMe.Entities
 {
     public class Player : AnimatedEntity
     {
+        public Animation idleRight, idleLeft, runRight, runLeft, fallRight, fallLeft, jumpRight, jumpLeft;
         public Player()
         {
             idleRight = GetAnimation("idler");
@@ -17,6 +18,41 @@ namespace MoveMe.Entities
             
             defaultSprite = new CCSprite(idleRight.Frames[0]);
             sprite = defaultSprite;
+        }
+
+        public void ApplyMovement(float seconds)
+        {
+            this.sprite.PositionX += seconds * this.velocityX;
+            this.sprite.PositionY += seconds * this.velocityY;
+            this.SelectAnimation(seconds);
+        }
+
+        void SelectAnimation(float seconds)
+        {
+            Animation animationToAssign = new Animation();
+            bool isFalling = this.velocityY < 0;
+            bool isStanding = this.velocityY == 0;
+            bool isJumping = this.velocityY > 0;
+            bool isMovingRight = this.velocityX > 0;
+            bool isMovingLeft = this.velocityX < 0;
+            bool isIdle = this.velocityX == 0;
+            if (isStanding && isIdle && !currentAnimation.Equals(idleRight))
+            {
+                animationToAssign = idleRight;
+            }
+            else if (isFalling && !currentAnimation.Equals(fallRight))
+            {
+                animationToAssign = fallRight;
+            }
+            else if (isJumping && !currentAnimation.Equals(jumpRight))
+            {
+                animationToAssign = jumpRight;
+            }
+            if (!animationToAssign.Equals(new Animation()))
+            {
+                AssignAnimation(animationToAssign);
+            }
+
         }
 
 
