@@ -10,10 +10,12 @@ namespace MoveMe
     {
         CCTileMap tilemap;
         Player player = new Player();
-        ButtonJump button = new ButtonJump();
+        ButtonJump buttonJump = new ButtonJump();
+        ButtonLeft buttonLeft = new ButtonLeft();
+        ButtonRight buttonRight = new ButtonRight();
         PhysicsEngine engine = new PhysicsEngine("map1");
 
-        public IntroLayer() 
+        public IntroLayer()
         {
         }
 
@@ -27,6 +29,7 @@ namespace MoveMe
             // Register for touch events
             var touchListener = new CCEventListenerTouchAllAtOnce();
             touchListener.OnTouchesBegan = OnTouchesBegan;
+            touchListener.OnTouchesEnded = OnTouchesEnded;
             AddEventListener(touchListener, this);
             tilemap = engine.Tilemap;
             tilemap.Antialiased = false;
@@ -35,11 +38,17 @@ namespace MoveMe
             player.sprite.Position = new CCPoint(20, 120);
             this.AddChild(player.sprite);
 
-            button.sprite.Position = new CCPoint(40, 40);
-            this.AddChild(button.sprite);
-            
+            buttonLeft.sprite.Position = new CCPoint(40, 40);
+            this.AddChild(buttonLeft.sprite);
+
+            buttonJump.sprite.Position = new CCPoint(70, 40);
+            this.AddChild(buttonJump.sprite);
+
+            buttonRight.sprite.Position = new CCPoint(100, 40);
+            this.AddChild(buttonRight.sprite);
+
             Schedule(ApplyPhysics, 0.1f);
-            
+
         }
 
         void ApplyPhysics(float seconds)
@@ -48,13 +57,32 @@ namespace MoveMe
             player.ApplyMovement(seconds);
             engine.Gravity(seconds, player);
         }
-        
+
 
         void OnTouchesBegan(List<CCTouch> touches, CCEvent touchEvent)
         {
             if (touches.Count > 0)
             {
-                button.HandlePress(touches[0], player);
+                if (buttonJump.IsTouched(touches[0]))
+                {
+                    buttonJump.HandlePress(touches[0], player);
+                }
+                else if (buttonLeft.IsTouched(touches[0]))
+                {
+                    buttonLeft.HandlePress(touches[0], player);
+                }
+                else if (buttonRight.IsTouched(touches[0]))
+                {
+                    buttonRight.HandlePress(touches[0], player);
+                }
+            }
+        }
+
+        void OnTouchesEnded(List<CCTouch> touches, CCEvent touchEvent)
+        {
+            if (touches.Count > 0)
+            {
+                engine.HandleTouchEnded(player);
             }
         }
     }

@@ -16,17 +16,20 @@ namespace MoveMe.Entities
             sprite = new CCSprite(buttonPress.Frames[0]);
 
         }
+        public bool IsTouched(CCTouch touch)
+        {
+            return this.BoundingBoxWorld.ContainsPoint(touch.Location);
+        }
 
         public void HandlePress(CCTouch touch, Player player)
         {
-            if (this.BoundingBoxWorld.ContainsPoint(touch.Location) && player.isStanding)
-                {
-                    player.isStanding = false;
-                    player.velocityY = 10;
-                    this.AssignAnimation(buttonPress);
-                    currentAnimation = new Animation();
-
-                }
+            if (IsTouched(touch) && player.isStanding)
+            {
+                player.isStanding = false;
+                player.velocityY = 10;
+                this.AssignAnimation(buttonPress);
+                currentAnimation = new Animation();
+            }
         }
 
     }

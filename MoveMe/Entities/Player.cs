@@ -5,6 +5,8 @@ namespace MoveMe.Entities
     public class Player : AnimatedEntity
     {
         public Animation idleRight, idleLeft, runRight, runLeft, fallRight, fallLeft, jumpRight, jumpLeft;
+        public string direction = "right";
+        
         public Player()
         {
             idleRight = GetAnimation("idler");

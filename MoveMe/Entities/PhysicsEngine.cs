@@ -30,14 +30,18 @@ namespace MoveMe.Entities
         {
             foreach(var tile in groundTiles)
             {
-                if(Intersects(tile, entity))
+                CCVector2 separatingVector = GetSeparatingVector(entity.BoundingBoxWorld, tile);
+                if (Intersects(tile, entity))
                 {
-                    entity.velocityY = 0;
                     entity.isStanding = true;
-                    CCVector2 separatingVector = GetSeparatingVector(entity.BoundingBoxWorld, tile);
+                    entity.velocityY = 0;
                     entity.sprite.PositionX += separatingVector.X;
                     entity.sprite.PositionY += separatingVector.Y;
 
+                }
+                else if(separatingVector.X>1)
+                {
+                    entity.isStanding = false;
                 }
             }
         }
@@ -155,5 +159,9 @@ namespace MoveMe.Entities
             return separation;
         }
 
+        public void HandleTouchEnded(Player player)
+        {
+            player.velocityX = 0;
+        }
     }
 }
