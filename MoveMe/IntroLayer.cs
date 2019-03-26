@@ -8,7 +8,6 @@ namespace MoveMe
 {
     public class IntroLayer : CCLayer
     {
-        CCTileMap tilemap;
         Player player = new Player();
         ButtonJump buttonJump = new ButtonJump();
         ButtonLeft buttonLeft = new ButtonLeft();
@@ -64,10 +63,6 @@ namespace MoveMe
             player.ReactToCollision(reposition);
         }
 
-        void PerformPlayerVsEnvironmentCollision()
-        {
-            
-        }
 
         void OnTouchesBegan(List<CCTouch> touches, CCEvent touchEvent)
         {
@@ -92,7 +87,7 @@ namespace MoveMe
         {
             if (touches.Count > 0)
             {
-                engine.HandleTouchEnded(player);
+                player.velocityX = 0;
             }
         }
     }
