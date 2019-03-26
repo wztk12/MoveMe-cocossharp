@@ -80,6 +80,9 @@
     <Compile Include="IntroLayer.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TilemapClasses\PropertyLocation.cs" />
+    <Compile Include="TilemapClasses\RectWithDirection.cs" />
+    <Compile Include="TilemapClasses\TileMapPropertyFinder.cs" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\Content\fonts\MarkerFelt-22.xnb" />

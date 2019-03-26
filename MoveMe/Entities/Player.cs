@@ -29,6 +29,13 @@ namespace MoveMe.Entities
             this.SelectAnimation(seconds);
         }
 
+        public void ReactToCollision(CCPoint reposition)
+		{
+			isStanding = reposition.Y > 0;
+
+			ProjectVelocityOnSurface (reposition);
+		}
+
         void SelectAnimation(float seconds)
         {
             Animation animationToAssign = new Animation();

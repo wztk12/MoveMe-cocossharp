@@ -46,6 +46,28 @@ namespace MoveMe.Entities
                 this.sprite.AddAction(currentAnimation.Action);
             }
         }
+
+        protected void ProjectVelocityOnSurface(CCPoint reposition)
+        {
+            if (reposition.X != 0 || reposition.Y != 0)
+            {
+                var repositionNormalized = reposition;
+                repositionNormalized.Normalize();
+
+                CCPoint velocity = new CCPoint(velocityX, velocityY);
+
+                var dot = CCPoint.Dot(velocity, repositionNormalized);
+                // falling into the collision, rather than out of
+                if (dot < 0)
+                {
+                    velocity -= repositionNormalized * dot;
+
+                    velocityX = velocity.X;
+                    velocityY = velocity.Y;
+                }
+            }
+        }
+
     }
 
     

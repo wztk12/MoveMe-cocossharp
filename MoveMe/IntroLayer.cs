@@ -31,9 +31,8 @@ namespace MoveMe
             touchListener.OnTouchesBegan = OnTouchesBegan;
             touchListener.OnTouchesEnded = OnTouchesEnded;
             AddEventListener(touchListener, this);
-            tilemap = engine.Tilemap;
-            tilemap.Antialiased = false;
-            this.AddChild(tilemap);
+            engine.Tilemap.Antialiased = false;
+            this.AddChild(engine.Tilemap);
 
             player.sprite.Position = new CCPoint(20, 120);
             this.AddChild(player.sprite);
@@ -53,11 +52,22 @@ namespace MoveMe
 
         void ApplyPhysics(float seconds)
         {
-            engine.LevelCollision(engine.GroundTiles, player);
+            //engine.LevelCollision(engine.GroundTiles, player);
             player.ApplyMovement(seconds);
             engine.Gravity(seconds, player);
+            CCPoint positionBeforeCollision = player.Position;
+            CCPoint reposition = CCPoint.Zero;
+            if (engine.PerformCollisionAgainst(player))
+            {
+                reposition = player.Position - positionBeforeCollision;
+            }
+            player.ReactToCollision(reposition);
         }
 
+        void PerformPlayerVsEnvironmentCollision()
+        {
+            
+        }
 
         void OnTouchesBegan(List<CCTouch> touches, CCEvent touchEvent)
         {

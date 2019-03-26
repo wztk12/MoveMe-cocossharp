@@ -1,20 +1,18 @@
 ﻿using CocosSharp;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
+using MoveMe.TilemapClasses;
+using System.Linq;
 
 namespace MoveMe.Entities
 {
     class PhysicsEngine
     {
-        private float gravity = 140;
-        public CCTileMap Tilemap
-        {
-            get;
-            private set;
-        }
+        List<RectWithDirection> collisions = new List<RectWithDirection>();
+        int tileDimension;
+        private float gravity = 200;
 
-        public List<CCRect> GroundTiles
+        public CCTileMap Tilemap
         {
             get;
             private set;
@@ -23,135 +21,282 @@ namespace MoveMe.Entities
         public PhysicsEngine(string mapname)
         {
             this.Tilemap = new CCTileMap("maps/" + mapname + ".tmx");
-            this.GroundTiles = GetGroundTiles(this.Tilemap);
+            this.PopulateFrom(this.Tilemap);
         }
 
-        public void LevelCollision(List<CCRect> groundTiles, AnimatedEntity entity)
-        {
-            foreach(var tile in groundTiles)
-            {
-                CCVector2 separatingVector = GetSeparatingVector(entity.BoundingBoxWorld, tile);
-                if (Intersects(tile, entity))
-                {
-                    entity.isStanding = true;
-                    entity.velocityY = 0;
-                    entity.sprite.PositionX += separatingVector.X;
-                    entity.sprite.PositionY += separatingVector.Y;
 
-                }
-                else if(separatingVector.X>1)
-                {
-                    entity.isStanding = false;
-                }
-            }
-        }
 
         public void Gravity(float seconds, AnimatedEntity entity)
         {
-            if (!entity.isStanding && entity.velocityY>-10) entity.velocityY += (float)Math.Pow(seconds / 2, 2) * -gravity;
+            if (!entity.isStanding && entity.velocityY > -10) entity.velocityY += (float)Math.Pow(seconds / 2, 2) * -gravity;
         }
 
-        bool Intersects(CCRect tile, AnimatedEntity entity)
+       
+
+        public void HandleTouchEnded(Player player)
         {
-            return tile.IntersectsRect(entity.BoundingBoxWorld);
+            player.velocityX = 0;
         }
 
-        List<CCRect> GetGroundTiles(CCTileMap tileMap)
+        //**************************************************************************************************
+
+        
+
+        public void PopulateFrom(CCTileMap tileMap)
         {
-            // Width and Height are equal so we can use either
-            List<CCRect> rectangles = new List<CCRect>();
-            int tileDimension = (int)tileMap.TileTexelSize.Width;
+            tileDimension = (int)(tileMap.TileTexelSize.Width + .5f);
 
-            // Find out how many rows and columns are in our tile map
-            int numberOfColumns = (int)tileMap.MapDimensions.Size.Width;
-            int numberOfRows = (int)tileMap.MapDimensions.Size.Height;
+            TileMapPropertyFinder finder = new TileMapPropertyFinder(tileMap);
 
-            // Tile maps can have multiple layers, so let's loop through all of them:
-            foreach (CCTileMapLayer layer in tileMap.TileLayersContainer.Children)
+            foreach (var propertyLocation in finder.GetPropertyLocations())
             {
-                // Loop through the columns and rows to find all tiles
-                for (int column = 0; column < numberOfColumns; column++)
+                if (propertyLocation.Properties.ContainsKey("type"))
                 {
-                    // We're going to add tileDimension / 2 to get the position
-                    // of the center of the tile - this will help us in 
-                    // positioning entities, and will eliminate the possibility
-                    // of floating point error when calculating the nearest tile:
-                    int worldX = tileDimension * column + tileDimension / 2;
-                    for (int row = 0; row < numberOfRows; row++)
+                    float centerX = propertyLocation.WorldX;
+                    float centerY = propertyLocation.WorldY;
+
+                    float left = centerX - tileDimension / 2.0f;
+                    float bottom = centerY - tileDimension / 2.0f;
+
+                    RectWithDirection rectangle = new RectWithDirection
                     {
-                        // See above on why we add tileDimension / 2
-                        int worldY = tileDimension * row + tileDimension / 2;
+                        Left = left,
+                        Bottom = bottom,
+                        Width = tileDimension,
+                        Height = tileDimension
+                    };
 
-                        var tile = GetGroundTileRect(worldX, worldY, layer);
-                        rectangles.Add(tile);
+                    collisions.Add(rectangle);
+                }
+            }
 
+            // Sort by XAxis to speed future searches:
+            collisions = collisions.OrderBy(item => item.Left).ToList();
+
+            // now let's adjust the directions that these point
+            for (int i = 0; i < collisions.Count; i++)
+            {
+                var rect = collisions[i];
+
+                // By default rectangles can reposition objects in all directions:
+                int valueToAssign = (int)Directions.All;
+
+                float centerX = rect.CenterX;
+                float centerY = rect.CenterY;
+
+                // If there are collisions on the sides, then this 
+                // rectangle can no longer repositon objects in that direction.
+                if (HasCollisionAt(centerX - tileDimension, centerY))
+                {
+                    valueToAssign -= (int)Directions.Left;
+                }
+                if (HasCollisionAt(centerX + tileDimension, centerY))
+                {
+                    valueToAssign -= (int)Directions.Right;
+                }
+                if (HasCollisionAt(centerX, centerY + tileDimension))
+                {
+                    valueToAssign -= (int)Directions.Up;
+                }
+                if (HasCollisionAt(centerX, centerY - tileDimension))
+                {
+                    valueToAssign -= (int)Directions.Down;
+                }
+
+                rect.Directions = (Directions)valueToAssign;
+                collisions[i] = rect;
+            }
+
+            for (int i = collisions.Count - 1; i > -1; i--)
+            {
+                if (collisions[i].Directions == Directions.None)
+                {
+                    collisions.RemoveAt(i);
+                }
+            }
+        }
+
+        int GetFirstAfter(float value)
+        {
+            int lowBoundIndex = 0;
+            int highBoundIndex = collisions.Count;
+
+            if (lowBoundIndex == highBoundIndex)
+            {
+                return lowBoundIndex;
+            }
+
+            // We want it inclusive
+            highBoundIndex -= 1;
+            int current = 0;
+
+
+            while (true)
+            {
+                current = (lowBoundIndex + highBoundIndex) >> 1;
+                if (highBoundIndex - lowBoundIndex < 2)
+                {
+                    if (collisions[highBoundIndex].Left <= value)
+                    {
+                        return highBoundIndex + 1;
+                    }
+                    else if (collisions[lowBoundIndex].Left <= value)
+                    {
+                        return lowBoundIndex + 1;
+                    }
+                    else if (collisions[lowBoundIndex].Left > value)
+                    {
+                        return lowBoundIndex;
                     }
                 }
+
+                if (collisions[current].Left >= value)
+                {
+                    highBoundIndex = current;
+                }
+                else if (collisions[current].Left < value)
+                {
+                    lowBoundIndex = current;
+                }
             }
-            return rectangles;
+
+
+
+
         }
 
-        CCRect GetGroundTileRect(int worldX, int worldY, CCTileMapLayer layer)
+        bool HasCollisionAt(float worldX, float worldY)
         {
-            CCTileMapCoordinates tileAtXy = layer.ClosestTileCoordAtNodePosition(new CCPoint(worldX, worldY));
+            int leftIndex;
+            int rightIndex;
 
-            CCTileGidAndFlags info = layer.TileGIDAndFlags(tileAtXy.Column, tileAtXy.Row);
+            GetIndicesBetween(worldX - tileDimension, worldX + tileDimension, out leftIndex, out rightIndex);
 
-            if (info != null)
+            for (int i = leftIndex; i < rightIndex; i++)
             {
-                Dictionary<string, string> properties = null;
-
-                try
+                if (collisions[i].ContainsPoint(worldX, worldY))
                 {
-                    properties = Tilemap.TilePropertiesForGID(info.Gid);
+                    return true;
                 }
-                catch { }
-
-                if (properties != null && properties.ContainsKey("type") && properties["type"] == "ground")
-                {
-                    return new CCRect(worldX - 8, worldY - 8, 16, 16);
-                }
-                return new CCRect();
             }
-            return new CCRect();
+            return false;
         }
 
-        CCVector2 GetSeparatingVector(CCRect first, CCRect second)
+        void GetIndicesBetween(float leftX, float rightX, out int leftIndex, out int rightIndex)
+        {
+            float leftAdjusted = tileDimension * (((int)leftX) / tileDimension) - tileDimension / 2;
+            float rightAdjusted = tileDimension * (((int)rightX) / tileDimension) + tileDimension / 2;
+
+            leftIndex = GetFirstAfter(leftAdjusted);
+            rightIndex = GetFirstAfter(rightAdjusted);
+        }
+
+        public bool PerformCollisionAgainst(AnimatedEntity entity)
+        {
+            bool didCollisionOccur = false;
+
+            int leftIndex;
+            int rightIndex;
+
+            GetIndicesBetween(
+                entity.BoundingBoxWorld.LowerLeft.X, entity.BoundingBoxWorld.UpperRight.X, out leftIndex, out rightIndex);
+
+            var boundingBoxWorld = entity.BoundingBoxWorld;
+
+            for (int i = leftIndex; i < rightIndex; i++)
+            {
+                var separatingVector = GetSeparatingVector(boundingBoxWorld, collisions[i]);
+
+                if (separatingVector != CCVector2.Zero)
+                {
+                    entity.PositionX += separatingVector.X;
+                    entity.PositionY += separatingVector.Y;
+                    // refresh boundingBoxWorld:
+                    boundingBoxWorld = entity.BoundingBoxWorld;
+
+                    didCollisionOccur = true;
+                }
+            }
+
+            return didCollisionOccur;
+        }
+
+
+        CCVector2 GetSeparatingVector(CCRect first, RectWithDirection second)
         {
             // Default to no separation
             CCVector2 separation = CCVector2.Zero;
 
             // Only calculate separation if the rectangles intersect
-            if (first.IntersectsRect(second))
+            if (Intersects(first, second))
             {
                 // The intersectionRect returns the rectangle produced
-                // by overlapping the two rectangles
-                var intersectionRect = first.Intersection(second);
+                // by overlapping the two rectangles.
+                // This is protected by partitioning and deep collision, so it
+                // won't happen too often - it's okay to do a ToRect here
+                var intersectionRect = first.Intersection(second.ToRect());
 
-                // Separation should occur by moving the minimum distance
-                // possible. We do this by checking which is smaller: width or height?
-                bool separateHorizontally = intersectionRect.Size.Width < intersectionRect.Size.Height;
+                float minDistance = float.PositiveInfinity;
 
-                if (separateHorizontally)
+                float firstCenterX = first.Center.X;
+                float firstCenterY = first.Center.Y;
+
+                float secondCenterX = second.Left + second.Width / 2.0f;
+                float secondCenterY = second.Bottom + second.Width / 2.0f;
+
+                bool canMoveLeft = (second.Directions & Directions.Left) == Directions.Left && firstCenterX < secondCenterX;
+                bool canMoveRight = (second.Directions & Directions.Right) == Directions.Right && firstCenterX > secondCenterX;
+                bool canMoveDown = (second.Directions & Directions.Down) == Directions.Down && firstCenterY < secondCenterY;
+                bool canMoveUp = (second.Directions & Directions.Up) == Directions.Up && firstCenterY > secondCenterY;
+
+
+                if (canMoveLeft)
                 {
-                    separation.X = intersectionRect.Size.Width;
-                    // Since separation is from the perspective
-                    // of 'first', the value should be negative if
-                    // the first is to the left of the second.
-                    if (first.Center.X < second.Center.X)
+                    float candidate = first.UpperRight.X - second.Left;
+
+                    if (candidate > 0)
                     {
-                        separation.X *= -1;
+                        minDistance = candidate;
+
+                        separation.X = -minDistance;
+                        separation.Y = 0;
                     }
-                    separation.Y = 0;
                 }
-                else
+                if (canMoveRight)
                 {
-                    separation.X = 0;
+                    float candidate = (second.Left + second.Width) - first.LowerLeft.X;
 
-                    separation.Y = intersectionRect.Size.Height;
-                    if (first.Center.Y < second.Center.Y)
+                    if (candidate > 0 && candidate < minDistance)
                     {
-                        separation.Y *= -1;
+                        minDistance = candidate;
+
+                        separation.X = minDistance;
+                        separation.Y = 0;
+                    }
+                }
+                if (canMoveUp)
+                {
+                    float candidate = (second.Bottom + second.Height) - first.Origin.Y;
+
+                    if (candidate > 0 && candidate < minDistance)
+                    {
+                        minDistance = candidate;
+
+                        separation.X = 0;
+                        separation.Y = minDistance;
+                    }
+
+                }
+                if (canMoveDown)
+                {
+                    float candidate = first.UpperRight.Y - second.Bottom;
+
+                    if (candidate > 0 && candidate < minDistance)
+                    {
+                        minDistance = candidate;
+
+                        separation.X = 0;
+                        separation.Y = -minDistance;
                     }
                 }
             }
@@ -159,9 +304,13 @@ namespace MoveMe.Entities
             return separation;
         }
 
-        public void HandleTouchEnded(Player player)
+        bool Intersects(CCRect first, RectWithDirection second)
         {
-            player.velocityX = 0;
+            return first.UpperRight.X > second.Left &&
+                first.LowerLeft.X < second.Left + second.Width &&
+                first.UpperRight.Y > second.Bottom &&
+                first.LowerLeft.Y < second.Bottom + second.Height;
+
         }
     }
 }
