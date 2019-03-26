@@ -28,7 +28,7 @@ namespace MoveMe.Entities
 
         public void Gravity(float seconds, AnimatedEntity entity)
         {
-            if (!entity.isStanding && entity.velocityY > -10) entity.velocityY += (float)Math.Pow(seconds / 2, 2) * -gravity;
+            if (!entity.isStanding && entity.velocityY > -10) entity.velocityY += (seconds*seconds/2) * -gravity;
         }
 
        
@@ -37,8 +37,6 @@ namespace MoveMe.Entities
         {
             player.velocityX = 0;
         }
-
-        //**************************************************************************************************
 
         
 
@@ -306,10 +304,7 @@ namespace MoveMe.Entities
 
         bool Intersects(CCRect first, RectWithDirection second)
         {
-            return first.UpperRight.X > second.Left &&
-                first.LowerLeft.X < second.Left + second.Width &&
-                first.UpperRight.Y > second.Bottom &&
-                first.LowerLeft.Y < second.Bottom + second.Height;
+            return first.IntersectsRect(second.ToRect());
 
         }
     }

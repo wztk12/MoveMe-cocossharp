@@ -45,7 +45,7 @@ namespace MoveMe
             buttonRight.sprite.Position = new CCPoint(100, 40);
             this.AddChild(buttonRight.sprite);
 
-            Schedule(ApplyPhysics, 0.1f);
+            Schedule(ApplyPhysics);
 
         }
 
