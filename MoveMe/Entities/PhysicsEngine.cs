@@ -234,67 +234,28 @@ namespace MoveMe.Entities
                 // won't happen too often - it's okay to do a ToRect here
                 var intersectionRect = first.Intersection(second.ToRect());
 
-                float minDistance = float.PositiveInfinity;
+                bool separateHorizontally = intersectionRect.Size.Width < intersectionRect.Size.Height;
 
-                float firstCenterX = first.Center.X;
-                float firstCenterY = first.Center.Y;
-
-                float secondCenterX = second.Left + second.Width / 2.0f;
-                float secondCenterY = second.Bottom + second.Width / 2.0f;
-
-                bool canMoveLeft = (second.Directions & Directions.Left) == Directions.Left && firstCenterX < secondCenterX;
-                bool canMoveRight = (second.Directions & Directions.Right) == Directions.Right && firstCenterX > secondCenterX;
-                bool canMoveDown = (second.Directions & Directions.Down) == Directions.Down && firstCenterY < secondCenterY;
-                bool canMoveUp = (second.Directions & Directions.Up) == Directions.Up && firstCenterY > secondCenterY;
-
-
-                if (canMoveLeft)
+                if (separateHorizontally)
                 {
-                    float candidate = first.UpperRight.X - second.Left;
-
-                    if (candidate > 0)
+                    separation.X = intersectionRect.Size.Width;
+                    // Since separation is from the perspective
+                    // of 'first', the value should be negative if
+                    // the first is to the left of the second.
+                    if (first.Center.X < second.ToRect().Center.X)
                     {
-                        minDistance = candidate;
-
-                        separation.X = -minDistance;
-                        separation.Y = 0;
+                        separation.X *= -1;
                     }
+                    separation.Y = 0;
                 }
-                if (canMoveRight)
+                else
                 {
-                    float candidate = (second.Left + second.Width) - first.LowerLeft.X;
+                    separation.X = 0;
 
-                    if (candidate > 0 && candidate < minDistance)
+                    separation.Y = intersectionRect.Size.Height;
+                    if (first.Center.Y < second.ToRect().Center.Y)
                     {
-                        minDistance = candidate;
-
-                        separation.X = minDistance;
-                        separation.Y = 0;
-                    }
-                }
-                if (canMoveUp)
-                {
-                    float candidate = (second.Bottom + second.Height) - first.Origin.Y;
-
-                    if (candidate > 0 && candidate < minDistance)
-                    {
-                        minDistance = candidate;
-
-                        separation.X = 0;
-                        separation.Y = minDistance;
-                    }
-
-                }
-                if (canMoveDown)
-                {
-                    float candidate = first.UpperRight.Y - second.Bottom;
-
-                    if (candidate > 0 && candidate < minDistance)
-                    {
-                        minDistance = candidate;
-
-                        separation.X = 0;
-                        separation.Y = -minDistance;
+                        separation.Y *= -1;
                     }
                 }
             }
