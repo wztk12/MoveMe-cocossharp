@@ -62,8 +62,8 @@ namespace MoveMe.Entities
                 {
                     velocity -= repositionNormalized * dot;
 
-                    velocityX = velocity.X;
-                    velocityY = velocity.Y;
+                    this.velocityX = velocity.X;
+                    this.velocityY = velocity.Y;
                 }
             }
         }

@@ -36,13 +36,13 @@ namespace MoveMe
             player.sprite.Position = new CCPoint(20, 120);
             this.AddChild(player.sprite);
 
-            buttonLeft.sprite.Position = new CCPoint(40, 40);
+            buttonLeft.sprite.Position = new CCPoint(35, 40);
             this.AddChild(buttonLeft.sprite);
 
             buttonJump.sprite.Position = new CCPoint(70, 40);
             this.AddChild(buttonJump.sprite);
 
-            buttonRight.sprite.Position = new CCPoint(100, 40);
+            buttonRight.sprite.Position = new CCPoint(105, 40);
             this.AddChild(buttonRight.sprite);
 
             Schedule(ApplyPhysics);

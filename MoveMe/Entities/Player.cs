@@ -40,7 +40,6 @@ namespace MoveMe.Entities
         {
             Animation animationToAssign = new Animation();
             bool isFalling = this.velocityY < 0;
-            bool isStanding = this.velocityY == 0;
             bool isJumping = this.velocityY > 0;
             bool isMovingRight = this.velocityX > 0;
             bool isMovingLeft = this.velocityX < 0;

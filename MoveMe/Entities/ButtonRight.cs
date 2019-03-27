@@ -19,7 +19,7 @@ namespace MoveMe.Entities
             if (IsTouched(touch))
             {
                 player.direction = "right";
-                player.velocityX = 10;
+                player.velocityX = 20;
             }
         }
 
