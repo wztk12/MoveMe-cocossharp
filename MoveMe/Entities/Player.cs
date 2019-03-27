@@ -1,4 +1,6 @@
 ﻿using CocosSharp;
+using Java.Util;
+using System.Collections.Generic;
 
 namespace MoveMe.Entities
 {
@@ -6,18 +8,29 @@ namespace MoveMe.Entities
     {
         public Animation idleRight, idleLeft, runRight, runLeft, fallRight, fallLeft, jumpRight, jumpLeft;
         public string direction = "right";
-        
+        private Dictionary<string, Animation> idleAnimations = new Dictionary<string, Animation>();
+        private Dictionary<string, Animation> runAnimations = new Dictionary<string, Animation>();
+        private Dictionary<string, Animation> fallAnimations = new Dictionary<string, Animation>();
+        private Dictionary<string, Animation> jumpAnimations = new Dictionary<string, Animation>();
         public Player()
         {
             idleRight = GetAnimation("idler");
             idleLeft = GetAnimation("idlel");
+            idleAnimations.Add("right", idleRight);
+            idleAnimations.Add("left", idleLeft);
             runRight = GetAnimation("runr");
             runLeft = GetAnimation("runl");
+            runAnimations.Add("right", runRight);
+            runAnimations.Add("left", runLeft);
             fallRight = GetAnimation("fallRight");
             fallLeft = GetAnimation("fallLeft");
+            fallAnimations.Add("right", fallRight);
+            fallAnimations.Add("left", fallLeft);
             jumpRight = GetAnimation("jumpRight");
             jumpLeft = GetAnimation("jumpLeft");
-            
+            jumpAnimations.Add("right", jumpRight);
+            jumpAnimations.Add("left", jumpLeft);
+
             defaultSprite = new CCSprite(idleRight.Frames[0]);
             sprite = defaultSprite;
         }
@@ -41,20 +54,22 @@ namespace MoveMe.Entities
             Animation animationToAssign = new Animation();
             bool isFalling = this.velocityY < 0;
             bool isJumping = this.velocityY > 0;
-            bool isMovingRight = this.velocityX > 0;
-            bool isMovingLeft = this.velocityX < 0;
             bool isIdle = this.velocityX == 0;
-            if (isStanding && isIdle && !currentAnimation.Equals(idleRight))
+            if (isStanding && isIdle && !currentAnimation.Equals(idleAnimations[direction]))
             {
-                animationToAssign = idleRight;
+                animationToAssign = idleAnimations[direction];
             }
-            else if (isFalling && !currentAnimation.Equals(fallRight))
+            else if(isStanding && !isIdle && !currentAnimation.Equals(runAnimations[direction]))
             {
-                animationToAssign = fallRight;
+                animationToAssign = runAnimations[direction];
             }
-            else if (isJumping && !currentAnimation.Equals(jumpRight))
+            else if (isFalling && !currentAnimation.Equals(fallAnimations[direction]))
             {
-                animationToAssign = jumpRight;
+                animationToAssign = fallAnimations[direction];
+            }
+            else if (isJumping && !currentAnimation.Equals(jumpAnimations[direction]))
+            {
+                animationToAssign = jumpAnimations[direction];
             }
             if (!animationToAssign.Equals(new Animation()))
             {

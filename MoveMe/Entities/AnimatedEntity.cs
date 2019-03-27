@@ -8,7 +8,7 @@ namespace MoveMe.Entities
     {
         public Animation currentAnimation = new Animation();
         public CCSprite sprite, defaultSprite;
-        public float velocityX, velocityY = 0;
+        public float velocityX = 0, velocityY = 0;
         public bool isStanding = false;
 
         public AnimatedEntity()
