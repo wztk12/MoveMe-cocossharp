@@ -13,8 +13,8 @@ namespace MoveMe
             application.ContentRootDirectory = "Content";
             var windowSize = mainWindow.WindowSizeInPixels;
 
-            var desiredWidth = 1024.0f;
-            var desiredHeight = 798.0f;
+            var desiredWidth = 380.0f;
+            var desiredHeight = 240.0f;
 
             // This will set the world bounds to be (0,0, w, h)
             // CCSceneResolutionPolicy.ShowAll will ensure that the aspect ratio is preserved
@@ -33,8 +33,6 @@ namespace MoveMe
                 application.ContentSearchPaths.Add("ld");
                 CCSprite.DefaultTexelToContentSizeRatio = 1.0f;
             }
-
-            CCScene.SetDefaultDesignResolution(380, 240, CCSceneResolutionPolicy.ShowAll);
 
             var scene = new CCScene(mainWindow);
             var introLayer = new IntroLayer();
