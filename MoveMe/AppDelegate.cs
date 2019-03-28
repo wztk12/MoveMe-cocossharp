@@ -7,9 +7,11 @@ namespace MoveMe
 {
     public class AppDelegate : CCApplicationDelegate
     {
-
+        static CCWindow mainWindow;
         public override void ApplicationDidFinishLaunching(CCApplication application, CCWindow mainWindow)
         {
+            AppDelegate.mainWindow = mainWindow;
+            application.PreferMultiSampling = false;
             application.ContentRootDirectory = "Content";
             var windowSize = mainWindow.WindowSizeInPixels;
 
@@ -34,12 +36,10 @@ namespace MoveMe
                 CCSprite.DefaultTexelToContentSizeRatio = 1.0f;
             }
 
-            var scene = new CCScene(mainWindow);
-            var introLayer = new IntroLayer();
+            var gameScene = new GameScene(mainWindow);
 
-            scene.AddChild(introLayer);
 
-            mainWindow.RunWithScene(scene);
+            mainWindow.RunWithScene(gameScene);
         }
 
         public override void ApplicationDidEnterBackground(CCApplication application)
