@@ -71,6 +71,7 @@
     <Compile Include="Entities\ButtonRight.cs" />
     <Compile Include="Entities\ButtonLeft.cs" />
     <Compile Include="Entities\ButtonJump.cs" />
+    <Compile Include="Entities\Flag.cs" />
     <Compile Include="Entities\PhysicsEngine.cs" />
     <Compile Include="Entities\Player.cs" />
     <Compile Include="Program.cs">
@@ -96,6 +97,7 @@
     <AndroidAsset Include="Assets\Content\animations\jumpLeft.plist" />
     <AndroidAsset Include="Assets\Content\animations\jumpRight.plist" />
     <AndroidAsset Include="Assets\Content\animations\buttonPress.plist" />
+    <AndroidAsset Include="Assets\Content\animations\flag.plist" />
     <None Include="packages.config" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
@@ -163,6 +165,9 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\Content\images\arrowRight.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\Content\animations\flag.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

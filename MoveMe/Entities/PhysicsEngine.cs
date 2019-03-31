@@ -40,11 +40,11 @@ namespace MoveMe.Entities
 
             foreach (var propertyLocation in finder.GetPropertyLocations())
             {
+                float centerX = propertyLocation.WorldX;
+                float centerY = propertyLocation.WorldY;
                 if (propertyLocation.Properties.ContainsKey("type"))
                 {
-                    float centerX = propertyLocation.WorldX;
-                    float centerY = propertyLocation.WorldY;
-
+                    
                     float left = centerX - tileDimension / 2.0f;
                     float bottom = centerY - tileDimension / 2.0f;
 
@@ -58,6 +58,9 @@ namespace MoveMe.Entities
 
                     collisions.Add(rectangle);
                 }
+                //else if (propertyLocation.Properties.ContainsKey("XOffset"))
+                //{
+                //}
             }
 
             // Sort by XAxis to speed future searches:
@@ -149,10 +152,6 @@ namespace MoveMe.Entities
                     lowBoundIndex = current;
                 }
             }
-
-
-
-
         }
 
         bool HasCollisionAt(float worldX, float worldY)

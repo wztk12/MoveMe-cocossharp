@@ -1,6 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.2" tiledversion="1.2.2" name="mastersheet" tilewidth="16" tileheight="16" tilecount="6912" columns="64">
  <image source="mastersheet.png" width="1024" height="1728"/>
+ <tile id="774">
+  <properties>
+   <property name="XOffset" value="10"/>
+  </properties>
+ </tile>
+ <tile id="775">
+  <properties>
+   <property name="XOffset" value="10"/>
+  </properties>
+ </tile>
+ <tile id="776">
+  <properties>
+   <property name="XOffset" value="10"/>
+  </properties>
+ </tile>
+ <tile id="838">
+  <properties>
+   <property name="XOffset" value="10"/>
+  </properties>
+ </tile>
+ <tile id="839">
+  <properties>
+   <property name="XOffset" value="10"/>
+  </properties>
+ </tile>
+ <tile id="840">
+  <properties>
+   <property name="XOffset" value="10"/>
+  </properties>
+ </tile>
+ <tile id="902">
+  <properties>
+   <property name="XOffset" value="10"/>
+  </properties>
+ </tile>
+ <tile id="903">
+  <properties>
+   <property name="XOffset" value="10"/>
+  </properties>
+ </tile>
+ <tile id="904">
+  <properties>
+   <property name="XOffset" value="10"/>
+  </properties>
+ </tile>
+ <tile id="966">
+  <properties>
+   <property name="XOffset" value="10"/>
+  </properties>
+ </tile>
+ <tile id="967">
+  <properties>
+   <property name="XOffset" value="10"/>
+  </properties>
+ </tile>
+ <tile id="968">
+  <properties>
+   <property name="XOffset" value="10"/>
+  </properties>
+ </tile>
  <tile id="983" type="ground">
   <properties>
    <property name="type" value="ground"/>

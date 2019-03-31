@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="50" height="25" tilewidth="16" tileheight="16" infinite="0" nextlayerid="16" nextobjectid="1">
+<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="50" height="25" tilewidth="16" tileheight="16" infinite="0" nextlayerid="17" nextobjectid="1">
  <tileset firstgid="1" source="mastersheet.tsx"/>
  <layer id="13" name="bg" width="50" height="25">
   <data encoding="base64" compression="zlib">
@@ -8,12 +8,12 @@
  </layer>
  <layer id="14" name="fg1" width="50" height="25">
   <data encoding="base64" compression="zlib">
-   eJzt1LEKgDAMBNDsDv2P6p/7kVbBLIIYbWMv9AK3dCj3aKiIyDZ9j/esyZanieKo6Yjq0G4I+/SXA3mv1PHGg+iI/F+N6jiGDhzH1UIHHS0dakF25P18PrMk/65eDqSxOiy2mrt6hg6stNxROui4s/TuMvp7RHQUy0ODPQ==
+   eJzt1D0OgCAMBeAmjA7cQ70FR/M4HtKfxC4dFIHaVvqStzCY9wUiAMA2lJc7a8zrU6w4ajZqdeA2De/pK4fmd4WONx6NDsv/q14dZ9yhx0Et7nBHSwdaOBJCG8d4nE9X58iz9S6pkUM6S4Ejx1bzLcm6Q1dppPe44x8OapHe0vt9WHTs+tyEDw==
   </data>
  </layer>
  <layer id="15" name="fg2" width="50" height="25">
   <data encoding="base64" compression="zlib">
-   eJzt0DEOgCAMQNEGYbAbcCivy3E8joMsjS6aYEP8L/lhKUlBBAAAAPiXrCKlV9V7m2diOs998d0jpHf3itru/j/rde6rAIyxRdus2mqbFe/wcwCBqg8k
+   eJzt0DEKwCAMQNFQdWg27aG8bo/T47i4BDsVqwT+g79JiBEBAAAAfDjSnDlZRUrv0jkzV4n9Bk/Yu8dXRW1v9886vlsVgH/UaPPqPm1e8Y99Gox+DyQ=
   </data>
  </layer>
 </map>

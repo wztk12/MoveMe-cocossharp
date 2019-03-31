@@ -28,7 +28,9 @@ namespace MoveMe
         private void CreateLayers()
         {
             engine.Tilemap.Antialiased = false;
+            
             this.AddChild(engine.Tilemap);
+            
             var touchListener = new CCEventListenerTouchAllAtOnce();
             touchListener.OnTouchesBegan = OnTouchesBegan;
             touchListener.OnTouchesEnded = OnTouchesEnded;
@@ -37,12 +39,9 @@ namespace MoveMe
             this.AddChild(gameplayLayer);
             player.sprite.Position = new CCPoint(20, 200);
             gameplayLayer.AddChild(player.sprite);
-
             hudLayer = new CCLayer();
             this.AddChild(hudLayer);
             
-            Schedule(UpdateTimer, 1f);
-
             buttonLeft.sprite.Position = new CCPoint(35, 40);
             hudLayer.AddChild(buttonLeft.sprite);
 
@@ -52,10 +51,10 @@ namespace MoveMe
             buttonRight.sprite.Position = new CCPoint(105, 40);
             hudLayer.AddChild(buttonRight.sprite);
             AddEventListener(touchListener, hudLayer);
+            Schedule(UpdateTimer, 1f);
 
         }
 
-        
         void UpdateLabel(float seconds)
         {
             hudLayer.RemoveChild(label);
@@ -63,6 +62,7 @@ namespace MoveMe
             label.Position = new CCPoint(20, 200);
             hudLayer.AddChild(label);
         }
+
         void WorldLogic(float seconds)
         {
             //engine.LevelCollision(engine.GroundTiles, player);
@@ -77,7 +77,6 @@ namespace MoveMe
             player.ReactToCollision(reposition);
             PerformScrolling();
         }
-
 
         void OnTouchesBegan(List<CCTouch> touches, CCEvent touchEvent)
         {
@@ -141,6 +140,7 @@ namespace MoveMe
         {
             time += (int)seconds;
         }
+
     }
 }
 
