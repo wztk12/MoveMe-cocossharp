@@ -3,6 +3,7 @@ using CocosSharp;
 using MoveMe.Entities;
 using MoveMe;
 using CocosDenshion;
+using System;
 
 namespace MoveMe
 {
@@ -14,13 +15,14 @@ namespace MoveMe
         ButtonRight buttonRight = new ButtonRight();
         PhysicsEngine engine = new PhysicsEngine("map1");
         CCLayer gameplayLayer, hudLayer;
-
+        CCLabel label;
+        int time;
 
 
         public GameScene(CCWindow mainWindow) : base(mainWindow)
         {
             CreateLayers();
-            Schedule(ApplyPhysics);
+            Schedule(WorldLogic);
         }
 
         private void CreateLayers()
@@ -33,11 +35,14 @@ namespace MoveMe
             
             gameplayLayer = new CCLayer();
             this.AddChild(gameplayLayer);
-            player.sprite.Position = new CCPoint(20, 120);
+            player.sprite.Position = new CCPoint(20, 200);
             gameplayLayer.AddChild(player.sprite);
 
             hudLayer = new CCLayer();
             this.AddChild(hudLayer);
+            
+            Schedule(UpdateTimer, 1f);
+
             buttonLeft.sprite.Position = new CCPoint(35, 40);
             hudLayer.AddChild(buttonLeft.sprite);
 
@@ -50,8 +55,15 @@ namespace MoveMe
 
         }
 
-
-        void ApplyPhysics(float seconds)
+        
+        void UpdateLabel(float seconds)
+        {
+            hudLayer.RemoveChild(label);
+            label = new CCLabel(time.ToString(), "fonts/MarkerFelt-22", 22);
+            label.Position = new CCPoint(20, 200);
+            hudLayer.AddChild(label);
+        }
+        void WorldLogic(float seconds)
         {
             //engine.LevelCollision(engine.GroundTiles, player);
             player.ApplyMovement(seconds);
@@ -103,25 +115,31 @@ namespace MoveMe
             float levelWidth = engine.Tilemap.TileTexelSize.Width * engine.Tilemap.MapDimensions.Column;
             effectivePlayerX = System.Math.Min(effectivePlayerX, levelWidth - this.ContentSize.Center.X);
 
-            //float effectivePlayerY = player.PositionY;
-            //float levelHeight = engine.Tilemap.TileTexelSize.Height * engine.Tilemap.MapDimensions.Row;
-            //effectivePlayerY = System.Math.Min(player.Position.Y, levelHeight - this.ContentSize.Center.Y);
+            float effectivePlayerY = System.Math.Max(player.sprite.PositionY, this.ContentSize.Center.Y);
+            float levelHeight = engine.Tilemap.TileTexelSize.Height * engine.Tilemap.MapDimensions.Row;
+            effectivePlayerY = System.Math.Min(player.sprite.PositionY, levelHeight - this.ContentSize.Center.Y);
+            
             // We don't want to limit the scrolling on Y - instead levels should be large enough
             // so that the view never reaches the bottom. This allows the user to play
             // with their thumbs without them getting in the way of the game.
 
             float positionX = -effectivePlayerX + this.ContentSize.Center.X;
-            //float positionY = -effectivePlayerY + this.ContentSize.Center.Y;
+            float positionY = -effectivePlayerY + this.ContentSize.Center.Y;
 
             gameplayLayer.PositionX = positionX;
-            //gameplayLayer.PositionY = positionY;
+            gameplayLayer.PositionY = positionY;
 
             // We don't want the background to scroll, 
             // so we'll make it move the opposite direction of the rest of the tilemap:
 
 
             engine.Tilemap.TileLayersContainer.PositionX = positionX;
-            //engine.Tilemap.TileLayersContainer.PositionY = positionY;
+            engine.Tilemap.TileLayersContainer.PositionY = positionY;
+        }
+
+        void UpdateTimer(float seconds)
+        {
+            time += (int)seconds;
         }
     }
 }
