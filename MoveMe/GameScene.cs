@@ -15,13 +15,12 @@ namespace MoveMe
         ButtonRight buttonRight = new ButtonRight();
         PhysicsEngine engine = new PhysicsEngine("map1");
         CCLayer gameplayLayer, hudLayer;
-        CCLabel label;
         CCWindow mainWindow;
         CCDirector director;
         int time;
         decimal touchCounter;
         decimal missedCounter;
-        
+        int deaths;
 
         public GameScene(CCWindow mainWindow, CCDirector director) : base(mainWindow)
         {
@@ -44,6 +43,7 @@ namespace MoveMe
             gameplayLayer = new CCLayer();
             this.AddChild(gameplayLayer);
             player.sprite.Position = new CCPoint(20, 200);
+            player.defaultPosition = player.sprite.PositionWorldspace;
             gameplayLayer.AddChild(player.sprite);
             hudLayer = new CCLayer();
             this.AddChild(hudLayer);
@@ -60,13 +60,6 @@ namespace MoveMe
             Schedule(UpdateTimer, 1f);
         }
 
-        void UpdateLabel(float seconds)
-        {
-            hudLayer.RemoveChild(label);
-            label = new CCLabel(engine.PerformCollisionAgainstWin(player).ToString(), "fonts/MarkerFelt-22", 22);
-            label.Position = new CCPoint(20, 200);
-            hudLayer.AddChild(label);
-        }
 
         void WorldLogic(float seconds)
         {
@@ -75,16 +68,20 @@ namespace MoveMe
             engine.Gravity(seconds, player);
             CCPoint positionBeforeCollision = player.Position;
             CCPoint reposition = CCPoint.Zero;
-            if (engine.PerformCollisionAgainst(player))
+            if (engine.PerformCollisionAgainst("solid", player))
             {
-                player.isStanding = true;
                 reposition = player.Position - positionBeforeCollision;
             }
             player.ReactToCollision(reposition);
             PerformScrolling();
-            if (engine.PerformCollisionAgainstWin(player))
+            if (engine.PerformCollisionAgainst("win", player))
             {
-                HandleLevelFinish(time);
+                HandleLevelFinish();
+            }
+            if(engine.PerformCollisionAgainst("death", player))
+            {
+                player.sprite.Position = player.defaultPosition;
+                deaths++;
             }
         }
 
@@ -149,9 +146,9 @@ namespace MoveMe
             time += (int)seconds;
         }
 
-        public void HandleLevelFinish(int time)
+        public void HandleLevelFinish()
         {
-            var scene = new EndScene(mainWindow, time, touchCounter, missedCounter);
+            var scene = new EndScene(mainWindow, time, touchCounter, missedCounter, deaths);
             director.ReplaceScene(scene);
         }
 

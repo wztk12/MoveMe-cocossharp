@@ -21,7 +21,7 @@ namespace MoveMe.Entities
             if (IsTouched(touch) && player.isStanding)
             {
                 player.isStanding = false;
-                player.velocityY = 90;
+                player.velocityY = 110;
                 this.AssignAnimation(buttonPress);
                 currentAnimation = new Animation();
             }

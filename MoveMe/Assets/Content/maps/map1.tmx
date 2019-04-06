@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="50" height="25" tilewidth="16" tileheight="16" infinite="0" nextlayerid="17" nextobjectid="1">
+<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="50" height="25" tilewidth="16" tileheight="16" infinite="0" nextlayerid="17" nextobjectid="1">
  <tileset firstgid="1" source="mastersheet.tsx"/>
  <layer id="13" name="bg" width="50" height="25">
   <data encoding="base64" compression="zlib">
@@ -13,7 +13,7 @@
  </layer>
  <layer id="15" name="fg2" width="50" height="25">
   <data encoding="base64" compression="zlib">
-   eJzt0DEKwCAMQNFQdWg27aG8bo/T47i4BDsVqwT+g79JiBEBAAAAfDjSnDlZRUrv0jkzV4n9Bk/Yu8dXRW1v9886vlsVgH/UaPPqPm1e8Y99Gox+DyQ=
+   eJzt1D0KgDAMhuGgdWi21kN53R7H4xShg0Un+yOB94FvCx9NhooAAAAANixbn56gIrFk1z6ds7hyg3Nt6zlc+1u+iFrn7f5Bn3OzAmCM68+5x6rk61jFHv/JvxgPbw==
   </data>
  </layer>
 </map>

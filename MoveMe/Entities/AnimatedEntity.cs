@@ -10,6 +10,7 @@ namespace MoveMe.Entities
         public CCSprite sprite, defaultSprite;
         public float velocityX = 0, velocityY = 0;
         public bool isStanding = false;
+        public CCPoint defaultPosition;
 
         public AnimatedEntity()
         {

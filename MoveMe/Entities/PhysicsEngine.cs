@@ -10,6 +10,7 @@ namespace MoveMe.Entities
     {
         List<RectWithDirection> collisions = new List<RectWithDirection>();
         List<RectWithDirection> finishTiles = new List<RectWithDirection>();
+        List<RectWithDirection> deathTiles = new List<RectWithDirection>();
         int tileDimension;
         private float gravity = 140;
 
@@ -77,6 +78,23 @@ namespace MoveMe.Entities
 
                     finishTiles.Add(rectangle);
                 }
+                else if (propertyLocation.Properties.ContainsKey("Death"))
+                {
+                    float centerX = propertyLocation.WorldX;
+                    float centerY = propertyLocation.WorldY;
+                    float left = centerX - tileDimension / 2.0f;
+                    float bottom = centerY - tileDimension / 2.0f;
+
+                    RectWithDirection rectangle = new RectWithDirection
+                    {
+                        Left = left,
+                        Bottom = bottom,
+                        Width = tileDimension,
+                        Height = tileDimension
+                    };
+
+                    deathTiles.Add(rectangle);
+                }
             }
 
             // Sort by XAxis to speed future searches:
@@ -95,19 +113,19 @@ namespace MoveMe.Entities
 
                 // If there are collisions on the sides, then this 
                 // rectangle can no longer repositon objects in that direction.
-                if (HasCollisionAt(centerX - tileDimension, centerY))
+                if (HasCollisionAt(collisions, centerX - tileDimension, centerY))
                 {
                     valueToAssign -= (int)Directions.Left;
                 }
-                if (HasCollisionAt(centerX + tileDimension, centerY))
+                if (HasCollisionAt(collisions, centerX + tileDimension, centerY))
                 {
                     valueToAssign -= (int)Directions.Right;
                 }
-                if (HasCollisionAt(centerX, centerY + tileDimension))
+                if (HasCollisionAt(collisions, centerX, centerY + tileDimension))
                 {
                     valueToAssign -= (int)Directions.Up;
                 }
-                if (HasCollisionAt(centerX, centerY - tileDimension))
+                if (HasCollisionAt(collisions, centerX, centerY - tileDimension))
                 {
                     valueToAssign -= (int)Directions.Down;
                 }
@@ -123,6 +141,7 @@ namespace MoveMe.Entities
                     collisions.RemoveAt(i);
                 }
             }
+
             finishTiles = finishTiles.OrderBy(item => item.Left).ToList();
 
             // now let's adjust the directions that these point
@@ -138,19 +157,19 @@ namespace MoveMe.Entities
 
                 // If there are finishTiles on the sides, then this 
                 // rectangle can no longer repositon objects in that direction.
-                if (HasCollisionAtWin(centerX - tileDimension, centerY))
+                if (HasCollisionAt(finishTiles, centerX - tileDimension, centerY))
                 {
                     valueToAssign -= (int)Directions.Left;
                 }
-                if (HasCollisionAtWin(centerX + tileDimension, centerY))
+                if (HasCollisionAt(finishTiles, centerX + tileDimension, centerY))
                 {
                     valueToAssign -= (int)Directions.Right;
                 }
-                if (HasCollisionAtWin(centerX, centerY + tileDimension))
+                if (HasCollisionAt(finishTiles, centerX, centerY + tileDimension))
                 {
                     valueToAssign -= (int)Directions.Up;
                 }
-                if (HasCollisionAtWin(centerX, centerY - tileDimension))
+                if (HasCollisionAt(finishTiles, centerX, centerY - tileDimension))
                 {
                     valueToAssign -= (int)Directions.Down;
                 }
@@ -166,12 +185,57 @@ namespace MoveMe.Entities
                     finishTiles.RemoveAt(i);
                 }
             }
+
+
+            deathTiles = deathTiles.OrderBy(item => item.Left).ToList();
+
+            // now let's adjust the directions that these point
+            for (int i = 0; i < deathTiles.Count; i++)
+            {
+                var rect = deathTiles[i];
+
+                // By default rectangles can reposition objects in all directions:
+                int valueToAssign = (int)Directions.All;
+
+                float centerX = rect.CenterX;
+                float centerY = rect.CenterY;
+
+                // If there are deathTiles on the sides, then this 
+                // rectangle can no longer repositon objects in that direction.
+                if (HasCollisionAt(deathTiles, centerX - tileDimension, centerY))
+                {
+                    valueToAssign -= (int)Directions.Left;
+                }
+                if (HasCollisionAt(deathTiles, centerX + tileDimension, centerY))
+                {
+                    valueToAssign -= (int)Directions.Right;
+                }
+                if (HasCollisionAt(deathTiles, centerX, centerY + tileDimension))
+                {
+                    valueToAssign -= (int)Directions.Up;
+                }
+                if (HasCollisionAt(deathTiles, centerX, centerY - tileDimension))
+                {
+                    valueToAssign -= (int)Directions.Down;
+                }
+
+                rect.Directions = (Directions)valueToAssign;
+                deathTiles[i] = rect;
+            }
+
+            for (int i = deathTiles.Count - 1; i > -1; i--)
+            {
+                if (deathTiles[i].Directions == Directions.None)
+                {
+                    deathTiles.RemoveAt(i);
+                }
+            }
         }
 
-        int GetFirstAfter(float value)
+        int GetFirstAfter(List<RectWithDirection> collisionSet, float value)
         {
             int lowBoundIndex = 0;
-            int highBoundIndex = collisions.Count;
+            int highBoundIndex = collisionSet.Count;
 
             if (lowBoundIndex == highBoundIndex)
             {
@@ -188,41 +252,41 @@ namespace MoveMe.Entities
                 current = (lowBoundIndex + highBoundIndex) >> 1;
                 if (highBoundIndex - lowBoundIndex < 2)
                 {
-                    if (collisions[highBoundIndex].Left <= value)
+                    if (collisionSet[highBoundIndex].Left <= value)
                     {
                         return highBoundIndex + 1;
                     }
-                    else if (collisions[lowBoundIndex].Left <= value)
+                    else if (collisionSet[lowBoundIndex].Left <= value)
                     {
                         return lowBoundIndex + 1;
                     }
-                    else if (collisions[lowBoundIndex].Left > value)
+                    else if (collisionSet[lowBoundIndex].Left > value)
                     {
                         return lowBoundIndex;
                     }
                 }
 
-                if (collisions[current].Left >= value)
+                if (collisionSet[current].Left >= value)
                 {
                     highBoundIndex = current;
                 }
-                else if (collisions[current].Left < value)
+                else if (collisionSet[current].Left < value)
                 {
                     lowBoundIndex = current;
                 }
             }
         }
 
-        bool HasCollisionAt(float worldX, float worldY)
+        bool HasCollisionAt(List<RectWithDirection> collisionSet, float worldX, float worldY)
         {
             int leftIndex;
             int rightIndex;
 
-            GetIndicesBetween(worldX - tileDimension, worldX + tileDimension, out leftIndex, out rightIndex);
+            GetIndicesBetween(collisionSet, worldX - tileDimension, worldX + tileDimension, out leftIndex, out rightIndex);
 
             for (int i = leftIndex; i < rightIndex; i++)
             {
-                if (collisions[i].ContainsPoint(worldX, worldY))
+                if (collisionSet[i].ContainsPoint(worldX, worldY))
                 {
                     return true;
                 }
@@ -230,39 +294,55 @@ namespace MoveMe.Entities
             return false;
         }
 
-        void GetIndicesBetween(float leftX, float rightX, out int leftIndex, out int rightIndex)
+        void GetIndicesBetween(List<RectWithDirection> collisionSet, float leftX, float rightX, out int leftIndex, out int rightIndex)
         {
             float leftAdjusted = tileDimension * (((int)leftX) / tileDimension) - tileDimension / 2;
             float rightAdjusted = tileDimension * (((int)rightX) / tileDimension) + tileDimension / 2;
 
-            leftIndex = GetFirstAfter(leftAdjusted);
-            rightIndex = GetFirstAfter(rightAdjusted);
+            leftIndex = GetFirstAfter(collisionSet, leftAdjusted);
+            rightIndex = GetFirstAfter(collisionSet, rightAdjusted);
         }
 
-        public bool PerformCollisionAgainst(AnimatedEntity entity)
+        public bool PerformCollisionAgainst(string type, AnimatedEntity entity)
         {
+            List<RectWithDirection> collisionSet = new List<RectWithDirection>();
+            if (type == "solid")
+            {
+                collisionSet = collisions;
+            }
+            else if(type == "win")
+            {
+                collisionSet = finishTiles;
+            }
+            else if(type == "death")
+            {
+                collisionSet = deathTiles;
+            }
+
             bool didCollisionOccur = false;
 
             int leftIndex;
             int rightIndex;
 
-            GetIndicesBetween(
+            GetIndicesBetween( collisionSet,
                 entity.BoundingBoxWorld.LowerLeft.X, entity.BoundingBoxWorld.UpperRight.X, out leftIndex, out rightIndex);
 
             var boundingBoxWorld = entity.BoundingBoxWorld;
 
             for (int i = leftIndex; i < rightIndex; i++)
             {
-                var separatingVector = GetSeparatingVector(boundingBoxWorld, collisions[i]);
+                var separatingVector = GetSeparatingVector(boundingBoxWorld, collisionSet[i]);
 
                 if (separatingVector != CCVector2.Zero)
                 {
-                    entity.PositionX += separatingVector.X;
-                    entity.PositionY += separatingVector.Y;
-                    // refresh boundingBoxWorld:
-                    boundingBoxWorld = entity.BoundingBoxWorld;
-
                     didCollisionOccur = true;
+                    if (type == "solid")
+                    {
+                        entity.PositionX += separatingVector.X;
+                        entity.PositionY += separatingVector.Y;
+                        // refresh boundingBoxWorld:
+                        boundingBoxWorld = entity.BoundingBoxWorld;
+                    }
                 }
             }
 
@@ -357,102 +437,6 @@ namespace MoveMe.Entities
             return first.IntersectsRect(second.ToRect());
         }
 
-        //***************Handling win tiles collisions*************************
-        int GetFirstAfterWin(float value)
-        {
-            int lowBoundIndex = 0;
-            int highBoundIndex = finishTiles.Count;
-
-            if (lowBoundIndex == highBoundIndex)
-            {
-                return lowBoundIndex;
-            }
-
-            // We want it inclusive
-            highBoundIndex -= 1;
-            int current = 0;
-
-
-            while (true)
-            {
-                current = (lowBoundIndex + highBoundIndex) >> 1;
-                if (highBoundIndex - lowBoundIndex < 2)
-                {
-                    if (finishTiles[highBoundIndex].Left <= value)
-                    {
-                        return highBoundIndex + 1;
-                    }
-                    else if (finishTiles[lowBoundIndex].Left <= value)
-                    {
-                        return lowBoundIndex + 1;
-                    }
-                    else if (finishTiles[lowBoundIndex].Left > value)
-                    {
-                        return lowBoundIndex;
-                    }
-                }
-
-                if (finishTiles[current].Left >= value)
-                {
-                    highBoundIndex = current;
-                }
-                else if (finishTiles[current].Left < value)
-                {
-                    lowBoundIndex = current;
-                }
-            }
-        }
-
-        bool HasCollisionAtWin(float worldX, float worldY)
-        {
-            int leftIndex;
-            int rightIndex;
-
-            GetIndicesBetweenWin(worldX - tileDimension, worldX + tileDimension, out leftIndex, out rightIndex);
-
-            for (int i = leftIndex; i < rightIndex; i++)
-            {
-                if (finishTiles[i].ContainsPoint(worldX, worldY))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        void GetIndicesBetweenWin(float leftX, float rightX, out int leftIndex, out int rightIndex)
-        {
-            float leftAdjusted = tileDimension * (((int)leftX) / tileDimension) - tileDimension / 2;
-            float rightAdjusted = tileDimension * (((int)rightX) / tileDimension) + tileDimension / 2;
-
-            leftIndex = GetFirstAfterWin(leftAdjusted);
-            rightIndex = GetFirstAfterWin(rightAdjusted);
-        }
-
-        public bool PerformCollisionAgainstWin(AnimatedEntity entity)
-        {
-            bool didCollisionOccur = false;
-
-            int leftIndex;
-            int rightIndex;
-
-            GetIndicesBetweenWin(
-                entity.BoundingBoxWorld.LowerLeft.X, entity.BoundingBoxWorld.UpperRight.X, out leftIndex, out rightIndex);
-
-            var boundingBoxWorld = entity.BoundingBoxWorld;
-
-            for (int i = leftIndex; i < rightIndex; i++)
-            {
-                var separatingVector = GetSeparatingVector(boundingBoxWorld, finishTiles[i]);
-
-                if (separatingVector != CCVector2.Zero)
-                {
-                    didCollisionOccur = true;
-                }
-            }
-
-            return didCollisionOccur;
-        }
-
+        
     }
 }

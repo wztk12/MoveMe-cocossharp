@@ -12,6 +12,7 @@ namespace MoveMe.Entities
         private Dictionary<string, Animation> runAnimations = new Dictionary<string, Animation>();
         private Dictionary<string, Animation> fallAnimations = new Dictionary<string, Animation>();
         private Dictionary<string, Animation> jumpAnimations = new Dictionary<string, Animation>();
+
         public Player()
         {
             idleRight = GetAnimation("idler");

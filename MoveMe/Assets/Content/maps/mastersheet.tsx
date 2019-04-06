@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.2" tiledversion="1.2.2" name="mastersheet" tilewidth="16" tileheight="16" tilecount="6912" columns="64">
+<tileset version="1.2" tiledversion="1.2.3" name="mastersheet" tilewidth="16" tileheight="16" tilecount="6912" columns="64">
  <image source="mastersheet.png" width="1024" height="1728"/>
  <tile id="770">
   <properties>
@@ -19,6 +19,16 @@
  <tile id="983" type="ground">
   <properties>
    <property name="type" value="ground"/>
+  </properties>
+ </tile>
+ <tile id="1030">
+  <properties>
+   <property name="Death" value="y"/>
+  </properties>
+ </tile>
+ <tile id="1094">
+  <properties>
+   <property name="Death" value="y"/>
   </properties>
  </tile>
  <tile id="1281">
