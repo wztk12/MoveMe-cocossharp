@@ -63,7 +63,7 @@ namespace MoveMe.Entities
             {
                 animationToAssign = runAnimations[direction];
             }
-            else if (isFalling && !currentAnimation.Equals(fallAnimations[direction]))
+            else if (isFalling && !isStanding && !currentAnimation.Equals(fallAnimations[direction]))
             {
                 animationToAssign = fallAnimations[direction];
             }

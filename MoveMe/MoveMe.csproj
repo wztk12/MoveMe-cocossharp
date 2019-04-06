@@ -66,6 +66,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EndScene.cs" />
     <Compile Include="Entities\AnimatedEntity.cs" />
     <Compile Include="Entities\Animation.cs" />
     <Compile Include="Entities\ButtonRight.cs" />

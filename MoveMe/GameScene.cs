@@ -16,11 +16,15 @@ namespace MoveMe
         PhysicsEngine engine = new PhysicsEngine("map1");
         CCLayer gameplayLayer, hudLayer;
         CCLabel label;
+        CCWindow mainWindow;
+        CCDirector director;
         int time;
 
 
-        public GameScene(CCWindow mainWindow) : base(mainWindow)
+        public GameScene(CCWindow mainWindow, CCDirector director) : base(mainWindow)
         {
+            this.director = director;
+            this.mainWindow = mainWindow;
             CreateLayers();
             Schedule(WorldLogic);
         }
@@ -52,30 +56,34 @@ namespace MoveMe
             hudLayer.AddChild(buttonRight.sprite);
             AddEventListener(touchListener, hudLayer);
             Schedule(UpdateTimer, 1f);
-
         }
 
         void UpdateLabel(float seconds)
         {
             hudLayer.RemoveChild(label);
-            label = new CCLabel(time.ToString(), "fonts/MarkerFelt-22", 22);
+            label = new CCLabel(engine.PerformCollisionAgainstWin(player).ToString(), "fonts/MarkerFelt-22", 22);
             label.Position = new CCPoint(20, 200);
             hudLayer.AddChild(label);
         }
 
         void WorldLogic(float seconds)
         {
-            //engine.LevelCollision(engine.GroundTiles, player);
+            
             player.ApplyMovement(seconds);
             engine.Gravity(seconds, player);
             CCPoint positionBeforeCollision = player.Position;
             CCPoint reposition = CCPoint.Zero;
             if (engine.PerformCollisionAgainst(player))
             {
+                player.isStanding = true;
                 reposition = player.Position - positionBeforeCollision;
             }
             player.ReactToCollision(reposition);
             PerformScrolling();
+            if (engine.PerformCollisionAgainstWin(player))
+            {
+                HandleLevelFinish(time);
+            }
         }
 
         void OnTouchesBegan(List<CCTouch> touches, CCEvent touchEvent)
@@ -117,10 +125,7 @@ namespace MoveMe
             float effectivePlayerY = System.Math.Max(player.sprite.PositionY, this.ContentSize.Center.Y);
             float levelHeight = engine.Tilemap.TileTexelSize.Height * engine.Tilemap.MapDimensions.Row;
             effectivePlayerY = System.Math.Min(player.sprite.PositionY, levelHeight - this.ContentSize.Center.Y);
-            
-            // We don't want to limit the scrolling on Y - instead levels should be large enough
-            // so that the view never reaches the bottom. This allows the user to play
-            // with their thumbs without them getting in the way of the game.
+           
 
             float positionX = -effectivePlayerX + this.ContentSize.Center.X;
             float positionY = -effectivePlayerY + this.ContentSize.Center.Y;
@@ -128,8 +133,6 @@ namespace MoveMe
             gameplayLayer.PositionX = positionX;
             gameplayLayer.PositionY = positionY;
 
-            // We don't want the background to scroll, 
-            // so we'll make it move the opposite direction of the rest of the tilemap:
 
 
             engine.Tilemap.TileLayersContainer.PositionX = positionX;
@@ -139,6 +142,12 @@ namespace MoveMe
         void UpdateTimer(float seconds)
         {
             time += (int)seconds;
+        }
+
+        public void HandleLevelFinish(float time)
+        {
+            var scene = new EndScene(mainWindow, time);
+            director.ReplaceScene(scene);
         }
 
     }

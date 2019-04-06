@@ -9,6 +9,7 @@ namespace MoveMe.Entities
     class PhysicsEngine
     {
         List<RectWithDirection> collisions = new List<RectWithDirection>();
+        List<RectWithDirection> finishTiles = new List<RectWithDirection>();
         int tileDimension;
         private float gravity = 140;
 
@@ -28,10 +29,11 @@ namespace MoveMe.Entities
 
         public void Gravity(float seconds, AnimatedEntity entity)
         {
-            if (!entity.isStanding) entity.velocityY = Math.Max(entity.velocityY+(seconds*-gravity), -30);
+            if (!entity.isStanding) entity.velocityY = Math.Max(entity.velocityY + (seconds * -gravity), -30);
+            else entity.velocityY = 0;
         }
 
-        
+
         public void PopulateFrom(CCTileMap tileMap)
         {
             tileDimension = (int)(tileMap.TileTexelSize.Height + .5f);
@@ -40,11 +42,11 @@ namespace MoveMe.Entities
 
             foreach (var propertyLocation in finder.GetPropertyLocations())
             {
-                float centerX = propertyLocation.WorldX;
-                float centerY = propertyLocation.WorldY;
+
                 if (propertyLocation.Properties.ContainsKey("type"))
                 {
-                    
+                    float centerX = propertyLocation.WorldX;
+                    float centerY = propertyLocation.WorldY;
                     float left = centerX - tileDimension / 2.0f;
                     float bottom = centerY - tileDimension / 2.0f;
 
@@ -58,9 +60,23 @@ namespace MoveMe.Entities
 
                     collisions.Add(rectangle);
                 }
-                //else if (propertyLocation.Properties.ContainsKey("XOffset"))
-                //{
-                //}
+                else if (propertyLocation.Properties.ContainsKey("FinishPoint"))
+                {
+                    float centerX = propertyLocation.WorldX;
+                    float centerY = propertyLocation.WorldY;
+                    float left = centerX - tileDimension / 2.0f;
+                    float bottom = centerY - tileDimension / 2.0f;
+
+                    RectWithDirection rectangle = new RectWithDirection
+                    {
+                        Left = left,
+                        Bottom = bottom,
+                        Width = tileDimension,
+                        Height = tileDimension
+                    };
+
+                    finishTiles.Add(rectangle);
+                }
             }
 
             // Sort by XAxis to speed future searches:
@@ -105,6 +121,49 @@ namespace MoveMe.Entities
                 if (collisions[i].Directions == Directions.None)
                 {
                     collisions.RemoveAt(i);
+                }
+            }
+            finishTiles = finishTiles.OrderBy(item => item.Left).ToList();
+
+            // now let's adjust the directions that these point
+            for (int i = 0; i < finishTiles.Count; i++)
+            {
+                var rect = finishTiles[i];
+
+                // By default rectangles can reposition objects in all directions:
+                int valueToAssign = (int)Directions.All;
+
+                float centerX = rect.CenterX;
+                float centerY = rect.CenterY;
+
+                // If there are finishTiles on the sides, then this 
+                // rectangle can no longer repositon objects in that direction.
+                if (HasCollisionAtWin(centerX - tileDimension, centerY))
+                {
+                    valueToAssign -= (int)Directions.Left;
+                }
+                if (HasCollisionAtWin(centerX + tileDimension, centerY))
+                {
+                    valueToAssign -= (int)Directions.Right;
+                }
+                if (HasCollisionAtWin(centerX, centerY + tileDimension))
+                {
+                    valueToAssign -= (int)Directions.Up;
+                }
+                if (HasCollisionAtWin(centerX, centerY - tileDimension))
+                {
+                    valueToAssign -= (int)Directions.Down;
+                }
+
+                rect.Directions = (Directions)valueToAssign;
+                finishTiles[i] = rect;
+            }
+
+            for (int i = finishTiles.Count - 1; i > -1; i--)
+            {
+                if (finishTiles[i].Directions == Directions.None)
+                {
+                    finishTiles.RemoveAt(i);
                 }
             }
         }
@@ -296,7 +355,104 @@ namespace MoveMe.Entities
         bool Intersects(CCRect first, RectWithDirection second)
         {
             return first.IntersectsRect(second.ToRect());
-
         }
+
+        //***************Handling win tiles collisions*************************
+        int GetFirstAfterWin(float value)
+        {
+            int lowBoundIndex = 0;
+            int highBoundIndex = finishTiles.Count;
+
+            if (lowBoundIndex == highBoundIndex)
+            {
+                return lowBoundIndex;
+            }
+
+            // We want it inclusive
+            highBoundIndex -= 1;
+            int current = 0;
+
+
+            while (true)
+            {
+                current = (lowBoundIndex + highBoundIndex) >> 1;
+                if (highBoundIndex - lowBoundIndex < 2)
+                {
+                    if (finishTiles[highBoundIndex].Left <= value)
+                    {
+                        return highBoundIndex + 1;
+                    }
+                    else if (finishTiles[lowBoundIndex].Left <= value)
+                    {
+                        return lowBoundIndex + 1;
+                    }
+                    else if (finishTiles[lowBoundIndex].Left > value)
+                    {
+                        return lowBoundIndex;
+                    }
+                }
+
+                if (finishTiles[current].Left >= value)
+                {
+                    highBoundIndex = current;
+                }
+                else if (finishTiles[current].Left < value)
+                {
+                    lowBoundIndex = current;
+                }
+            }
+        }
+
+        bool HasCollisionAtWin(float worldX, float worldY)
+        {
+            int leftIndex;
+            int rightIndex;
+
+            GetIndicesBetweenWin(worldX - tileDimension, worldX + tileDimension, out leftIndex, out rightIndex);
+
+            for (int i = leftIndex; i < rightIndex; i++)
+            {
+                if (finishTiles[i].ContainsPoint(worldX, worldY))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        void GetIndicesBetweenWin(float leftX, float rightX, out int leftIndex, out int rightIndex)
+        {
+            float leftAdjusted = tileDimension * (((int)leftX) / tileDimension) - tileDimension / 2;
+            float rightAdjusted = tileDimension * (((int)rightX) / tileDimension) + tileDimension / 2;
+
+            leftIndex = GetFirstAfterWin(leftAdjusted);
+            rightIndex = GetFirstAfterWin(rightAdjusted);
+        }
+
+        public bool PerformCollisionAgainstWin(AnimatedEntity entity)
+        {
+            bool didCollisionOccur = false;
+
+            int leftIndex;
+            int rightIndex;
+
+            GetIndicesBetweenWin(
+                entity.BoundingBoxWorld.LowerLeft.X, entity.BoundingBoxWorld.UpperRight.X, out leftIndex, out rightIndex);
+
+            var boundingBoxWorld = entity.BoundingBoxWorld;
+
+            for (int i = leftIndex; i < rightIndex; i++)
+            {
+                var separatingVector = GetSeparatingVector(boundingBoxWorld, finishTiles[i]);
+
+                if (separatingVector != CCVector2.Zero)
+                {
+                    didCollisionOccur = true;
+                }
+            }
+
+            return didCollisionOccur;
+        }
+
     }
 }
