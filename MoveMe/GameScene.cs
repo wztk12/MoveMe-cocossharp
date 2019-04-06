@@ -19,7 +19,9 @@ namespace MoveMe
         CCWindow mainWindow;
         CCDirector director;
         int time;
-
+        decimal touchCounter;
+        decimal missedCounter;
+        
 
         public GameScene(CCWindow mainWindow, CCDirector director) : base(mainWindow)
         {
@@ -90,9 +92,11 @@ namespace MoveMe
         {
             if (touches.Count > 0)
             {
+                touchCounter++;
                 if (buttonJump.IsTouched(touches[0]))
                 {
                     buttonJump.HandlePress(touches[0], player);
+                    
                 }
                 else if (buttonLeft.IsTouched(touches[0]))
                 {
@@ -102,6 +106,7 @@ namespace MoveMe
                 {
                     buttonRight.HandlePress(touches[0], player);
                 }
+                else missedCounter++;
             }
         }
 
@@ -144,9 +149,9 @@ namespace MoveMe
             time += (int)seconds;
         }
 
-        public void HandleLevelFinish(float time)
+        public void HandleLevelFinish(int time)
         {
-            var scene = new EndScene(mainWindow, time);
+            var scene = new EndScene(mainWindow, time, touchCounter, missedCounter);
             director.ReplaceScene(scene);
         }
 
