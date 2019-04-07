@@ -57,10 +57,10 @@ namespace MoveMe
             buttonLeft.sprite.Position = new CCPoint(35, 40);
             hudLayer.AddChild(buttonLeft.sprite);
 
-            buttonJump.sprite.Position = new CCPoint(70, 40);
+            buttonJump.sprite.Position = new CCPoint(190, 40);
             hudLayer.AddChild(buttonJump.sprite);
 
-            buttonRight.sprite.Position = new CCPoint(105, 40);
+            buttonRight.sprite.Position = new CCPoint(225, 40);
             hudLayer.AddChild(buttonRight.sprite);
 
             coinCounter.Position = new CCPoint(30, 200);
@@ -110,7 +110,6 @@ namespace MoveMe
                 if (buttonJump.IsTouched(touches[0]))
                 {
                     buttonJump.HandlePress(touches[0], player);
-                    
                 }
                 else if (buttonLeft.IsTouched(touches[0]))
                 {
