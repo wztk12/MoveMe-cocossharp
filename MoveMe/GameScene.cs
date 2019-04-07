@@ -18,14 +18,20 @@ namespace MoveMe
         CCWindow mainWindow;
         CCDirector director;
         int time;
+        int coinsCollected = 0;
         decimal touchCounter;
         decimal missedCounter;
         int deaths;
+        CCLabel coinCounter;
+        static string staticCoinString;
 
         public GameScene(CCWindow mainWindow, CCDirector director) : base(mainWindow)
         {
             this.director = director;
             this.mainWindow = mainWindow;
+            staticCoinString = "/" + engine.coins;
+            coinCounter = new CCLabel("Coins: " + coinsCollected + staticCoinString, "arial", 22);
+            coinCounter.Color = CCColor3B.Orange;
             CreateLayers();
             Schedule(WorldLogic);
         }
@@ -56,6 +62,10 @@ namespace MoveMe
 
             buttonRight.sprite.Position = new CCPoint(105, 40);
             hudLayer.AddChild(buttonRight.sprite);
+
+            coinCounter.Position = new CCPoint(30, 200);
+            hudLayer.AddChild(coinCounter);
+
             AddEventListener(touchListener, hudLayer);
             Schedule(UpdateTimer, 1f);
         }
@@ -72,17 +82,24 @@ namespace MoveMe
             {
                 reposition = player.Position - positionBeforeCollision;
             }
-            player.ReactToCollision(reposition);
-            PerformScrolling();
             if (engine.PerformCollisionAgainst("win", player))
             {
                 HandleLevelFinish();
             }
-            if(engine.PerformCollisionAgainst("death", player))
+            if (engine.PerformCollisionAgainst("death", player))
             {
                 player.sprite.Position = player.defaultPosition;
                 deaths++;
             }
+            if (engine.PerformCollisionAgainst("coin", player))
+            {
+                coinsCollected++;
+                coinCounter.Text = "Coins: " + coinsCollected + staticCoinString;
+            }
+            player.ReactToCollision(reposition);
+  
+            PerformScrolling();
+           
         }
 
         void OnTouchesBegan(List<CCTouch> touches, CCEvent touchEvent)
@@ -146,11 +163,11 @@ namespace MoveMe
             time += (int)seconds;
         }
 
-        public void HandleLevelFinish()
-        {
-            var scene = new EndScene(mainWindow, time, touchCounter, missedCounter, deaths, player.distanceTravelled);
+       void HandleLevelFinish()
+       {
+            var scene = new EndScene(mainWindow, time, touchCounter, missedCounter, deaths, player.distanceTravelled, coinCounter.Text);
             director.ReplaceScene(scene);
-        }
+       }
 
     }
 }

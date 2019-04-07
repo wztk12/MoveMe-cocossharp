@@ -11,8 +11,10 @@ namespace MoveMe.Entities
         List<RectWithDirection> collisions = new List<RectWithDirection>();
         List<RectWithDirection> finishTiles = new List<RectWithDirection>();
         List<RectWithDirection> deathTiles = new List<RectWithDirection>();
+        List<RectWithDirection> coinTiles = new List<RectWithDirection>();
         int tileDimension;
         private float gravity = 140;
+        public int coins;
 
         public CCTileMap Tilemap
         {
@@ -94,6 +96,23 @@ namespace MoveMe.Entities
                     };
 
                     deathTiles.Add(rectangle);
+                }
+                else if (propertyLocation.Properties.ContainsKey("coin"))
+                {
+                    float centerX = propertyLocation.WorldX;
+                    float centerY = propertyLocation.WorldY;
+                    float left = centerX - tileDimension / 2.0f;
+                    float bottom = centerY - tileDimension / 2.0f;
+
+                    RectWithDirection rectangle = new RectWithDirection
+                    {
+                        Left = left,
+                        Bottom = bottom,
+                        Width = tileDimension,
+                        Height = tileDimension
+                    };
+
+                    coinTiles.Add(rectangle);
                 }
             }
 
@@ -230,6 +249,50 @@ namespace MoveMe.Entities
                     deathTiles.RemoveAt(i);
                 }
             }
+            coins = coinTiles.Count();
+            coinTiles = coinTiles.OrderBy(item => item.Left).ToList();
+
+            // now let's adjust the directions that these point
+            for (int i = 0; i < coinTiles.Count; i++)
+            {
+                var rect = coinTiles[i];
+
+                // By default rectangles can reposition objects in all directions:
+                int valueToAssign = (int)Directions.All;
+
+                float centerX = rect.CenterX;
+                float centerY = rect.CenterY;
+
+                // If there are coinTiles on the sides, then this 
+                // rectangle can no longer repositon objects in that direction.
+                if (HasCollisionAt(coinTiles, centerX - tileDimension, centerY))
+                {
+                    valueToAssign -= (int)Directions.Left;
+                }
+                if (HasCollisionAt(coinTiles, centerX + tileDimension, centerY))
+                {
+                    valueToAssign -= (int)Directions.Right;
+                }
+                if (HasCollisionAt(coinTiles, centerX, centerY + tileDimension))
+                {
+                    valueToAssign -= (int)Directions.Up;
+                }
+                if (HasCollisionAt(coinTiles, centerX, centerY - tileDimension))
+                {
+                    valueToAssign -= (int)Directions.Down;
+                }
+
+                rect.Directions = (Directions)valueToAssign;
+                coinTiles[i] = rect;
+            }
+
+            for (int i = coinTiles.Count - 1; i > -1; i--)
+            {
+                if (coinTiles[i].Directions == Directions.None)
+                {
+                    coinTiles.RemoveAt(i);
+                }
+            }
         }
 
         int GetFirstAfter(List<RectWithDirection> collisionSet, float value)
@@ -318,6 +381,10 @@ namespace MoveMe.Entities
             {
                 collisionSet = deathTiles;
             }
+            else if(type == "coin")
+            {
+                collisionSet = coinTiles;
+            }
 
             bool didCollisionOccur = false;
 
@@ -342,6 +409,12 @@ namespace MoveMe.Entities
                         entity.PositionY += separatingVector.Y;
                         // refresh boundingBoxWorld:
                         boundingBoxWorld = entity.BoundingBoxWorld;
+                    }
+                    if (type == "coin")
+                    {
+                        var tileCords = Tilemap.LayerNamed("fg2").ClosestTileCoordAtNodePosition(collisionSet[i].ToRect().Center);
+                        Tilemap.LayerNamed("fg2").RemoveTile(tileCords);
+                        collisionSet.Remove(collisionSet[i]);
                     }
                 }
             }
@@ -436,7 +509,6 @@ namespace MoveMe.Entities
         {
             return first.IntersectsRect(second.ToRect());
         }
-
         
     }
 }
