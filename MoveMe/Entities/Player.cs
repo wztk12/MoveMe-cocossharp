@@ -8,6 +8,7 @@ namespace MoveMe.Entities
     {
         public Animation idleRight, idleLeft, runRight, runLeft, fallRight, fallLeft, jumpRight, jumpLeft;
         public string direction = "right";
+        public float distanceTravelled;
         private Dictionary<string, Animation> idleAnimations = new Dictionary<string, Animation>();
         private Dictionary<string, Animation> runAnimations = new Dictionary<string, Animation>();
         private Dictionary<string, Animation> fallAnimations = new Dictionary<string, Animation>();
@@ -40,6 +41,7 @@ namespace MoveMe.Entities
         {
             this.sprite.PositionX += seconds * this.velocityX;
             this.sprite.PositionY += seconds * this.velocityY;
+            this.distanceTravelled += seconds * (velocityX + velocityY);
             this.SelectAnimation(seconds);
         }
 

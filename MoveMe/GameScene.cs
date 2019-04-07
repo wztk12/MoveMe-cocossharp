@@ -148,7 +148,7 @@ namespace MoveMe
 
         public void HandleLevelFinish()
         {
-            var scene = new EndScene(mainWindow, time, touchCounter, missedCounter, deaths);
+            var scene = new EndScene(mainWindow, time, touchCounter, missedCounter, deaths, player.distanceTravelled);
             director.ReplaceScene(scene);
         }
 
