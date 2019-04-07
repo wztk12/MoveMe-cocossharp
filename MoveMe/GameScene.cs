@@ -54,7 +54,7 @@ namespace MoveMe
             hudLayer = new CCLayer();
             this.AddChild(hudLayer);
             
-            buttonLeft.sprite.Position = new CCPoint(35, 40);
+            buttonLeft.sprite.Position = new CCPoint(155, 40);
             hudLayer.AddChild(buttonLeft.sprite);
 
             buttonJump.sprite.Position = new CCPoint(190, 40);
