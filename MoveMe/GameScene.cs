@@ -164,7 +164,7 @@ namespace MoveMe
 
        void HandleLevelFinish()
        {
-            var scene = new EndScene(mainWindow, time, touchCounter, missedCounter, deaths, player.distanceTravelled, coinCounter.Text);
+            var scene = new EndScene(mainWindow, director, time, touchCounter, missedCounter, deaths, player.distanceTravelled, coinCounter.Text);
             director.ReplaceScene(scene);
        }
 
