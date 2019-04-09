@@ -32,14 +32,16 @@ namespace MoveMe.Entities
 
         public void Gravity(float seconds, AnimatedEntity entity)
         {
-            if (!entity.isStanding) entity.velocityY = Math.Max(entity.velocityY + (seconds * -gravity), -30);
-            else entity.velocityY = 0;
+            if (!entity.isStanding)
+            {
+                entity.velocityY = Math.Max(entity.velocityY + (seconds * -gravity), -30);
+            }
         }
 
 
         public void PopulateFrom(CCTileMap tileMap)
         {
-            tileDimension = (int)(tileMap.TileTexelSize.Height + .5f);
+            tileDimension = (int)(tileMap.TileTexelSize.Height+0.5f);
 
             TileMapPropertyFinder finder = new TileMapPropertyFinder(tileMap);
 

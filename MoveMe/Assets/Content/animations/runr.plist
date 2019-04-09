@@ -11,7 +11,7 @@
 			<key>spriteOffset</key>
 			<string>{0,0}</string>
 			<key>spriteSize</key>
-			<string>{21,33}</string>
+			<string>{21,34}</string>
 			<key>spriteSourceSize</key>
 			<string>{21,33}</string>
 			<key>textureRect</key>
@@ -26,7 +26,7 @@
 			<key>spriteOffset</key>
 			<string>{0,0}</string>
 			<key>spriteSize</key>
-			<string>{18,31}</string>
+			<string>{21,34}</string>
 			<key>spriteSourceSize</key>
 			<string>{18,31}</string>
 			<key>textureRect</key>
@@ -39,9 +39,9 @@
 			<key>aliases</key>
 			<array/>
 			<key>spriteOffset</key>
-			<string>{-1,-1}</string>
+			<string>{0,0}</string>
 			<key>spriteSize</key>
-			<string>{16,31}</string>
+			<string>{21,34}</string>
 			<key>spriteSourceSize</key>
 			<string>{18,33}</string>
 			<key>textureRect</key>
@@ -54,9 +54,9 @@
 			<key>aliases</key>
 			<array/>
 			<key>spriteOffset</key>
-			<string>{0,1}</string>
+			<string>{0,0}</string>
 			<key>spriteSize</key>
-			<string>{18,31}</string>
+			<string>{21,34}</string>
 			<key>spriteSourceSize</key>
 			<string>{18,33}</string>
 			<key>textureRect</key>
@@ -71,7 +71,7 @@
 			<key>spriteOffset</key>
 			<string>{0,0}</string>
 			<key>spriteSize</key>
-			<string>{19,33}</string>
+			<string>{21,34}</string>
 			<key>spriteSourceSize</key>
 			<string>{19,33}</string>
 			<key>textureRect</key>
@@ -86,7 +86,7 @@
 			<key>spriteOffset</key>
 			<string>{0,0}</string>
 			<key>spriteSize</key>
-			<string>{18,31}</string>
+			<string>{21,34}</string>
 			<key>spriteSourceSize</key>
 			<string>{18,31}</string>
 			<key>textureRect</key>
@@ -99,9 +99,9 @@
 			<key>aliases</key>
 			<array/>
 			<key>spriteOffset</key>
-			<string>{-1,-1}</string>
+			<string>{0,0}</string>
 			<key>spriteSize</key>
-			<string>{19,31}</string>
+			<string>{21,34}</string>
 			<key>spriteSourceSize</key>
 			<string>{21,33}</string>
 			<key>textureRect</key>
@@ -116,7 +116,7 @@
 			<key>spriteOffset</key>
 			<string>{0,0}</string>
 			<key>spriteSize</key>
-			<string>{21,30}</string>
+			<string>{21,34}</string>
 			<key>spriteSourceSize</key>
 			<string>{21,30}</string>
 			<key>textureRect</key>

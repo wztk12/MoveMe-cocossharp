@@ -4,10 +4,11 @@ using MoveMe.Entities;
 using MoveMe;
 using CocosDenshion;
 using System;
+using MoveMe.Entities.Swipe;
 
 namespace MoveMe
 {
-    public class GameScene : CCScene
+    public class GameScene1 : CCScene
     {
         Player player = new Player();
         ButtonJump buttonJump = new ButtonJump();
@@ -19,19 +20,19 @@ namespace MoveMe
         CCDirector director;
         int time;
         int coinsCollected = 0;
-        decimal touchCounter;
-        decimal missedCounter;
+        TouchScreenInput touchScreen;
         int deaths;
         CCLabel coinCounter;
         static string staticCoinString;
 
-        public GameScene(CCWindow mainWindow, CCDirector director) : base(mainWindow)
+        public GameScene1(CCWindow mainWindow, CCDirector director) : base(mainWindow)
         {
+
             this.director = director;
             this.mainWindow = mainWindow;
             staticCoinString = "/" + engine.coins;
             coinCounter = new CCLabel("Coins: " + coinsCollected + staticCoinString, "arial", 22);
-            coinCounter.Color = CCColor3B.Orange;
+            coinCounter.Color = CCColor3B.Black;
             CreateLayers();
             Schedule(WorldLogic);
         }
@@ -41,11 +42,9 @@ namespace MoveMe
             engine.Tilemap.Antialiased = false;
             
             this.AddChild(engine.Tilemap);
-            
-            var touchListener = new CCEventListenerTouchAllAtOnce();
-            touchListener.OnTouchesBegan = OnTouchesBegan;
-            touchListener.OnTouchesEnded = OnTouchesEnded;
-            
+
+           
+
             gameplayLayer = new CCLayer();
             this.AddChild(gameplayLayer);
             player.Position = new CCPoint(20, 200);
@@ -53,27 +52,27 @@ namespace MoveMe
             gameplayLayer.AddChild(player);
             hudLayer = new CCLayer();
             this.AddChild(hudLayer);
-            
-            buttonLeft.sprite.Position = new CCPoint(155, 40);
-            hudLayer.AddChild(buttonLeft.sprite);
 
-            buttonJump.sprite.Position = new CCPoint(190, 40);
-            hudLayer.AddChild(buttonJump.sprite);
-
-            buttonRight.sprite.Position = new CCPoint(225, 40);
-            hudLayer.AddChild(buttonRight.sprite);
+            touchScreen = new TouchScreenInput(gameplayLayer);
 
             coinCounter.Position = new CCPoint(30, 200);
             hudLayer.AddChild(coinCounter);
-
-            AddEventListener(touchListener, hudLayer);
             Schedule(UpdateTimer, 1f);
         }
-
 
         void WorldLogic(float seconds)
         {
             coinCounter.Text = player.velocityY.ToString() + " " + player.velocityX.ToString();
+            touchScreen.UpdateInputValues();
+            if (touchScreen.HorizontalRatio < 0)
+            {
+                player.direction = "left";
+            }
+            else if (touchScreen.HorizontalRatio > 0)
+            {
+                player.direction = "right";
+            }
+            player.ApplySwipeInput(touchScreen.HorizontalRatio, touchScreen.WasJumpPressed);
             player.ApplyMovement(seconds);
             engine.Gravity(seconds, player);
             CCPoint positionBeforeCollision = player.Position;
@@ -97,39 +96,11 @@ namespace MoveMe
                 coinsCollected++;
                 coinCounter.Text = "Coins: " + coinsCollected + staticCoinString;
             }
+    
 
-  
             PerformScrolling();
-           
-        }
+            
 
-        void OnTouchesBegan(List<CCTouch> touches, CCEvent touchEvent)
-        {
-            if (touches.Count > 0)
-            {
-                touchCounter++;
-                if (buttonJump.IsTouched(touches[0]))
-                {
-                    buttonJump.HandlePress(touches[0], player);
-                }
-                else if (buttonLeft.IsTouched(touches[0]))
-                {
-                    buttonLeft.HandlePress(touches[0], player);
-                }
-                else if (buttonRight.IsTouched(touches[0]))
-                {
-                    buttonRight.HandlePress(touches[0], player);
-                }
-                else missedCounter++;
-            }
-        }
-
-        void OnTouchesEnded(List<CCTouch> touches, CCEvent touchEvent)
-        {
-            if (touches.Count > 0)
-            {
-                player.velocityX = 0;
-            }
         }
 
         private void PerformScrolling()
@@ -165,7 +136,7 @@ namespace MoveMe
 
        void HandleLevelFinish()
        {
-            var scene = new EndScene(mainWindow, director, "GameScene1", time, touchCounter, missedCounter, deaths, player.distanceTravelled, coinCounter.Text);
+            var scene = new EndScene(mainWindow, director,"GameScene", time, 2, 1, deaths, player.distanceTravelled, coinCounter.Text);
             director.ReplaceScene(scene);
        }
 

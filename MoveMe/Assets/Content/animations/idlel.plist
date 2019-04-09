@@ -10,14 +10,14 @@
 			<array/>
 			<key>spriteOffset</key>
 			<string>{0,0}</string>
-			<key>spriteSize</key>
-			<string>{19,32}</string>
 			<key>spriteSourceSize</key>
 			<string>{19,32}</string>
 			<key>textureRect</key>
 			<string>{{1,1},{19,32}}</string>
 			<key>textureRotated</key>
 			<false/>
+			<key>spriteSize</key>
+			<string>{21,34}</string>
 		</dict>
 		<key>idlelb.png</key>
 		<dict>
@@ -25,14 +25,14 @@
 			<array/>
 			<key>spriteOffset</key>
 			<string>{0,0}</string>
-			<key>spriteSize</key>
-			<string>{19,32}</string>
 			<key>spriteSourceSize</key>
 			<string>{19,32}</string>
 			<key>textureRect</key>
 			<string>{{1,35},{19,32}}</string>
 			<key>textureRotated</key>
 			<false/>
+			<key>spriteSize</key>
+			<string>{21,34}</string>
 		</dict>
 		<key>idlelc.png</key>
 		<dict>
@@ -41,7 +41,7 @@
 			<key>spriteOffset</key>
 			<string>{0,0}</string>
 			<key>spriteSize</key>
-			<string>{19,32}</string>
+			<string>{21,34}</string>
 			<key>spriteSourceSize</key>
 			<string>{19,32}</string>
 			<key>textureRect</key>
@@ -56,7 +56,7 @@
 			<key>spriteOffset</key>
 			<string>{0,0}</string>
 			<key>spriteSize</key>
-			<string>{19,33}</string>
+			<string>{21,34}</string>
 			<key>spriteSourceSize</key>
 			<string>{19,33}</string>
 			<key>textureRect</key>
@@ -71,7 +71,7 @@
 			<key>spriteOffset</key>
 			<string>{0,0}</string>
 			<key>spriteSize</key>
-			<string>{19,34}</string>
+			<string>{21,34}</string>
 			<key>spriteSourceSize</key>
 			<string>{19,34}</string>
 			<key>textureRect</key>
@@ -86,7 +86,7 @@
 			<key>spriteOffset</key>
 			<string>{0,0}</string>
 			<key>spriteSize</key>
-			<string>{19,34}</string>
+			<string>{21,34}</string>
 			<key>spriteSourceSize</key>
 			<string>{19,34}</string>
 			<key>textureRect</key>
@@ -101,7 +101,7 @@
 			<key>spriteOffset</key>
 			<string>{0,0}</string>
 			<key>spriteSize</key>
-			<string>{19,34}</string>
+			<string>{21,34}</string>
 			<key>spriteSourceSize</key>
 			<string>{19,34}</string>
 			<key>textureRect</key>
@@ -116,7 +116,7 @@
 			<key>spriteOffset</key>
 			<string>{0,0}</string>
 			<key>spriteSize</key>
-			<string>{19,34}</string>
+			<string>{21,34}</string>
 			<key>spriteSourceSize</key>
 			<string>{19,34}</string>
 			<key>textureRect</key>
@@ -131,7 +131,7 @@
 			<key>spriteOffset</key>
 			<string>{0,0}</string>
 			<key>spriteSize</key>
-			<string>{19,34}</string>
+			<string>{21,34}</string>
 			<key>spriteSourceSize</key>
 			<string>{19,34}</string>
 			<key>textureRect</key>
@@ -146,7 +146,7 @@
 			<key>spriteOffset</key>
 			<string>{0,0}</string>
 			<key>spriteSize</key>
-			<string>{19,33}</string>
+			<string>{21,34}</string>
 			<key>spriteSourceSize</key>
 			<string>{19,33}</string>
 			<key>textureRect</key>
@@ -161,7 +161,7 @@
 			<key>spriteOffset</key>
 			<string>{0,0}</string>
 			<key>spriteSize</key>
-			<string>{19,33}</string>
+			<string>{21,34}</string>
 			<key>spriteSourceSize</key>
 			<string>{19,33}</string>
 			<key>textureRect</key>
@@ -176,7 +176,7 @@
 			<key>spriteOffset</key>
 			<string>{0,0}</string>
 			<key>spriteSize</key>
-			<string>{19,34}</string>
+			<string>{21,34}</string>
 			<key>spriteSourceSize</key>
 			<string>{19,34}</string>
 			<key>textureRect</key>

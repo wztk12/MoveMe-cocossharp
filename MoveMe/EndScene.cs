@@ -7,14 +7,15 @@ namespace MoveMe
 {
     public class EndScene : CCScene
     {
-        string statistics, time, accuracy, actualCoinsCollected;
+        string statistics, time, accuracy, actualCoinsCollected, nextLevel;
         decimal hits;
         CCSprite navButton;
         CCDirector director;
         CCWindow mainWindow;
         
-        public EndScene(CCWindow mainWindow, CCDirector director, int completionTime, decimal touches, decimal misses, int deaths, float distance, string coinsCollected) : base(mainWindow)
+        public EndScene(CCWindow mainWindow, CCDirector director, string nextLevel, int completionTime, decimal touches, decimal misses, int deaths, float distance, string coinsCollected) : base(mainWindow)
         {
+            this.nextLevel = nextLevel;
             this.director = director;
             this.mainWindow = mainWindow;
             time = completionTime.ToString() + " s";
@@ -49,8 +50,17 @@ namespace MoveMe
             {
                 if (this.navButton.BoundingBox.ContainsPoint(touches[0].Location))
                 {
-                    var scene = new GameScene(mainWindow, director);
-                    director.ReplaceScene(scene);
+                    if (nextLevel == "GameScene1")
+                    {
+                        var scene = new GameScene1(mainWindow, director);
+                        director.ReplaceScene(scene);
+                    }
+                    else if(nextLevel == "GameScene")
+                    {
+                        var scene = new GameScene(mainWindow, director);
+                        director.ReplaceScene(scene);
+                    }
+                    
                 }
             }
         }

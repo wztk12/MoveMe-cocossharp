@@ -35,12 +35,26 @@ namespace MoveMe.Entities
 
             defaultSprite = new CCSprite(idleRight.Frames[0]);
             sprite = defaultSprite;
+            this.AddChild(sprite);
+        }
+
+        public void ApplySwipeInput(float horizontalMovementRatio, bool jumpPressed)
+        {
+
+            velocityX = horizontalMovementRatio * 30;
+
+            if (jumpPressed && isStanding)
+            {
+                isStanding = false;
+                velocityY = 110;
+            }
         }
 
         public void ApplyMovement(float seconds)
         {
-            this.sprite.PositionX += seconds * this.velocityX;
-            this.sprite.PositionY += seconds * this.velocityY;
+
+            this.PositionX += this.velocityX * seconds;
+            this.PositionY += this.velocityY * seconds;
             this.distanceTravelled += seconds * (velocityX + velocityY);
             this.SelectAnimation(seconds);
         }
@@ -49,14 +63,34 @@ namespace MoveMe.Entities
 		{
 			isStanding = reposition.Y > 0;
 
-			ProjectVelocityOnSurface (reposition);
+			this.ProjectVelocityOnSurface (reposition);
 		}
 
+        protected void ProjectVelocityOnSurface(CCPoint reposition)
+        {
+            if (reposition.X != 0 || reposition.Y != 0)
+            {
+                
+
+                
+                CCPoint velocity = new CCPoint(velocityX, velocityY);
+
+                var dot = CCPoint.Dot(velocity, reposition);
+                // falling into the collision, rather than out of
+                if (dot < 0 && reposition.X<5 && reposition.Y<5)
+                {
+                    velocity -= reposition * dot;
+
+                    velocityX = velocity.X;
+                    velocityY = velocity.Y;
+                }
+            }
+        }
         void SelectAnimation(float seconds)
         {
             Animation animationToAssign = new Animation();
-            bool isFalling = this.velocityY < 0;
-            bool isJumping = this.velocityY > 0;
+            bool isFalling = this.velocityY < -3;
+            bool isJumping = this.velocityY > 3;
             bool isIdle = this.velocityX == 0;
             if (isStanding && isIdle && !currentAnimation.Equals(idleAnimations[direction]))
             {

@@ -48,27 +48,6 @@ namespace MoveMe.Entities
             }
         }
 
-        protected void ProjectVelocityOnSurface(CCPoint reposition)
-        {
-            if (reposition.X != 0 || reposition.Y != 0)
-            {
-                var repositionNormalized = reposition;
-                repositionNormalized.Normalize();
-
-                CCPoint velocity = new CCPoint(velocityX, velocityY);
-
-                var dot = CCPoint.Dot(velocity, repositionNormalized);
-                // falling into the collision, rather than out of
-                if (dot < 0)
-                {
-                    velocity -= repositionNormalized * dot;
-
-                    this.velocityX = velocity.X;
-                    this.velocityY = velocity.Y;
-                }
-            }
-        }
-
     }
 
     
