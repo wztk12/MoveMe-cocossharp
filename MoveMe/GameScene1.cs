@@ -63,17 +63,7 @@ namespace MoveMe
         void WorldLogic(float seconds)
         {
             coinCounter.Text = player.velocityY.ToString() + " " + player.velocityX.ToString();
-            touchScreen.UpdateInputValues();
-            if (touchScreen.HorizontalRatio < 0)
-            {
-                player.direction = "left";
-            }
-            else if (touchScreen.HorizontalRatio > 0)
-            {
-                player.direction = "right";
-            }
-            player.ApplySwipeInput(touchScreen.HorizontalRatio, touchScreen.WasJumpPressed);
-            player.ApplyMovement(seconds);
+            
             engine.Gravity(seconds, player);
             CCPoint positionBeforeCollision = player.Position;
             CCPoint reposition = CCPoint.Zero;
@@ -96,8 +86,17 @@ namespace MoveMe
                 coinsCollected++;
                 coinCounter.Text = "Coins: " + coinsCollected + staticCoinString;
             }
-    
-
+            player.ApplyMovement(seconds);
+            touchScreen.UpdateInputValues();
+            if (touchScreen.HorizontalRatio < 0)
+            {
+                player.direction = "left";
+            }
+            else if (touchScreen.HorizontalRatio > 0)
+            {
+                player.direction = "right";
+            }
+            player.ApplySwipeInput(touchScreen.HorizontalRatio, touchScreen.WasJumpPressed);
             PerformScrolling();
             
 

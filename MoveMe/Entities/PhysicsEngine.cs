@@ -41,7 +41,7 @@ namespace MoveMe.Entities
 
         public void PopulateFrom(CCTileMap tileMap)
         {
-            tileDimension = (int)(tileMap.TileTexelSize.Height+0.5f);
+            tileDimension = (int)(tileMap.TileTexelSize.Height);
 
             TileMapPropertyFinder finder = new TileMapPropertyFinder(tileMap);
 
