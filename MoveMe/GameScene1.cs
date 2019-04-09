@@ -11,16 +11,14 @@ namespace MoveMe
     public class GameScene1 : CCScene
     {
         Player player = new Player();
-        ButtonJump buttonJump = new ButtonJump();
-        ButtonLeft buttonLeft = new ButtonLeft();
-        ButtonRight buttonRight = new ButtonRight();
+        ButtonJumpLarge buttonJumpLarge = new ButtonJumpLarge();
         PhysicsEngine engine = new PhysicsEngine("map1");
         CCLayer gameplayLayer, hudLayer;
+        TouchScreenInput touchScreen;
         CCWindow mainWindow;
         CCDirector director;
         int time;
         int coinsCollected = 0;
-        TouchScreenInput touchScreen;
         int deaths;
         CCLabel coinCounter;
         static string staticCoinString;
@@ -50,11 +48,11 @@ namespace MoveMe
             player.Position = new CCPoint(20, 200);
             player.defaultPosition = player.Position;
             gameplayLayer.AddChild(player);
+            touchScreen = new TouchScreenInput(gameplayLayer, buttonJumpLarge, player);
             hudLayer = new CCLayer();
             this.AddChild(hudLayer);
-
-            touchScreen = new TouchScreenInput(gameplayLayer);
-
+            buttonJumpLarge.sprite.Position = new CCPoint(190, 40);
+            hudLayer.AddChild(buttonJumpLarge.sprite);
             coinCounter.Position = new CCPoint(30, 200);
             hudLayer.AddChild(coinCounter);
             Schedule(UpdateTimer, 1f);
@@ -62,7 +60,6 @@ namespace MoveMe
 
         void WorldLogic(float seconds)
         {
-            coinCounter.Text = player.velocityY.ToString() + " " + player.velocityX.ToString();
             
             engine.Gravity(seconds, player);
             CCPoint positionBeforeCollision = player.Position;
@@ -135,7 +132,7 @@ namespace MoveMe
 
        void HandleLevelFinish()
        {
-            var scene = new EndScene(mainWindow, director,"GameScene", time, 2, 1, deaths, player.distanceTravelled, coinCounter.Text);
+            var scene = new EndScene(mainWindow, director,"GameScene", time, touchScreen.touchCounter, 0, deaths, player.distanceTravelled, coinCounter.Text);
             director.ReplaceScene(scene);
        }
 

@@ -69,6 +69,7 @@
     <Compile Include="EndScene.cs" />
     <Compile Include="Entities\AnimatedEntity.cs" />
     <Compile Include="Entities\Animation.cs" />
+    <Compile Include="Entities\ButtonJumpLarge.cs" />
     <Compile Include="Entities\ButtonRight.cs" />
     <Compile Include="Entities\ButtonLeft.cs" />
     <Compile Include="Entities\ButtonJump.cs" />
@@ -175,6 +176,9 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\Content\images\navButton.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\Content\images\jumpButtonLarge.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

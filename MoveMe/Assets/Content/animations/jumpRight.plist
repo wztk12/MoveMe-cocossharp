@@ -13,9 +13,9 @@
                 <key>spriteSize</key>
                 <string>{21,34}</string>
                 <key>spriteSourceSize</key>
-                <string>{17,34}</string>
+                <string>{21,34}</string>
                 <key>textureRect</key>
-                <string>{{1,1},{17,34}}</string>
+                <string>{{0,0},{21,34}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
@@ -31,9 +31,9 @@
             <key>realTextureFileName</key>
             <string>jumpRight.png</string>
             <key>size</key>
-            <string>{19,36}</string>
+            <string>{21,34}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:6bd563ff30cf29970f9c9b5fd63be2a7:f53f9e61414260ca706589a62c1cb928:092628f7cde3a181d9fd025e9c8206a7$</string>
+            <string>$TexturePacker:SmartUpdate:4dfdb100eecee6f9520b62024477aabe:83305e04c83ddea58e641f8b5c1f65af:092628f7cde3a181d9fd025e9c8206a7$</string>
             <key>textureFileName</key>
             <string>jumpRight.png</string>
         </dict>

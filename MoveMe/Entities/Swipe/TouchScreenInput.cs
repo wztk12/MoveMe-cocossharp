@@ -9,6 +9,9 @@ namespace MoveMe.Entities.Swipe
 		CCEventListenerTouchAllAtOnce touchListener;
         CCLayer owner;
 		bool touchedOnRightSide = false;
+        public int touchCounter;
+        ButtonJumpLarge designatedButton;
+        Player player;
 
 		TouchScreenAnalogStick analogStick;
 
@@ -27,9 +30,11 @@ namespace MoveMe.Entities.Swipe
 		}
 
 
-		public TouchScreenInput(CCLayer owner)
+		public TouchScreenInput(CCLayer owner, ButtonJumpLarge designatedButton, Player player)
 		{
+            this.designatedButton = designatedButton;
             this.owner = owner;
+            this.player = player;
 
 			analogStick = new TouchScreenAnalogStick ();
 			analogStick.Owner = owner;
@@ -43,16 +48,16 @@ namespace MoveMe.Entities.Swipe
 
 		private void HandleTouchesBegan(List<CCTouch> touches, CCEvent touchEvent)
 		{
-			foreach (var item in touches)
+			foreach (var touch in touches)
 			{
-                touchedOnRightSide = true;
+                touchCounter++;
+                designatedButton.HandlePress(touch, player);
 			}
 		}
 
 		private void HandleTouchesMoved (List<CCTouch> touches, CCEvent touchEvent)
 		{
 			analogStick.DetermineHorizontalRatio (touches);
-
 		}
 
 		public void Dispose()

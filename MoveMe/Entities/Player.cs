@@ -1,7 +1,7 @@
 ﻿using CocosSharp;
 using Java.Util;
 using System.Collections.Generic;
-
+using System;
 namespace MoveMe.Entities
 {
     public class Player : AnimatedEntity
@@ -55,7 +55,8 @@ namespace MoveMe.Entities
 
             this.PositionX += this.velocityX * seconds;
             this.PositionY += this.velocityY * seconds;
-            this.distanceTravelled += seconds * (velocityX + velocityY);
+            this.distanceTravelled += seconds * Math.Abs(velocityX);
+            if (!isStanding) this.distanceTravelled += seconds * Math.Abs(velocityY);
             this.SelectAnimation(seconds);
         }
 
@@ -70,8 +71,6 @@ namespace MoveMe.Entities
         {
             if (reposition.X != 0 || reposition.Y != 0)
             {
-                
-
                 
                 CCPoint velocity = new CCPoint(velocityX, velocityY);
 

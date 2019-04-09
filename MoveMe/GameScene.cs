@@ -73,8 +73,6 @@ namespace MoveMe
 
         void WorldLogic(float seconds)
         {
-            coinCounter.Text = player.velocityY.ToString() + " " + player.velocityX.ToString();
-            
             engine.Gravity(seconds, player);
             CCPoint positionBeforeCollision = player.Position;
             CCPoint reposition = CCPoint.Zero;
