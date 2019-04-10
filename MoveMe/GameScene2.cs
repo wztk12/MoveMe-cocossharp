@@ -11,12 +11,9 @@ namespace MoveMe
 {
     public class GameScene2 : CCScene
     {
-        const int JOYSTICK_Z_ORDER = 9999;
-
         SneakyJoystickControlSkinnedBase joystick;
 
         Player player = new Player();
-        ButtonJumpLarge buttonJumpLarge = new ButtonJumpLarge();
         PhysicsEngine engine = new PhysicsEngine("map1");
         CCLayer gameplayLayer, hudLayer;
         CCWindow mainWindow;
@@ -151,7 +148,7 @@ namespace MoveMe
 
        void HandleLevelFinish()
        {
-            var scene = new EndScene(mainWindow, director,"GameScene", time , joystick.touchCounter, joystick.missedCounter, deaths, player.distanceTravelled, coinCounter.Text);
+            var scene = new EndScene(mainWindow, director,"GameScene3", time , joystick.touchCounter, joystick.missedCounter, deaths, player.distanceTravelled, coinCounter.Text);
             director.ReplaceScene(scene);
        }
 

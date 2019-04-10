@@ -68,7 +68,17 @@ namespace MoveMe
                         var scene = new GameScene(mainWindow, director);
                         director.ReplaceScene(scene);
                     }
-                    
+                    else if (nextLevel == "GameScene2")
+                    {
+                        var scene = new GameScene2(mainWindow, director);
+                        director.ReplaceScene(scene);
+                    }
+                    else if (nextLevel == "GameScene3")
+                    {
+                        var scene = new GameScene3(mainWindow, director);
+                        director.ReplaceScene(scene);
+                    }
+
                 }
             }
         }

@@ -81,6 +81,7 @@
     <Compile Include="Entities\Swipe\TouchScreenInput.cs" />
     <Compile Include="GameScene2.cs" />
     <Compile Include="GameScene1.cs" />
+    <Compile Include="GameScene3.cs" />
     <Compile Include="Joystick\ColoredCircleSprite.cs" />
     <Compile Include="Joystick\SneakyJoystickControl.cs" />
     <Compile Include="Joystick\SneakyJoystickControlSkinnedBase.cs" />

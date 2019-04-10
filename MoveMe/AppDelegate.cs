@@ -39,7 +39,7 @@ namespace MoveMe
                 CCSprite.DefaultTexelToContentSizeRatio = 1.0f;
             }
 
-            var gameScene = new GameScene2(mainWindow, director);
+            var gameScene = new GameScene(mainWindow, director);
 
 
             director.RunWithScene(gameScene);

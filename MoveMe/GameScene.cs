@@ -124,7 +124,7 @@ namespace MoveMe
 
         void OnTouchesEnded(List<CCTouch> touches, CCEvent touchEvent)
         {
-            if (touches.Count > 0)
+            if (touches.Count >0)
             {
                 player.velocityX = 0;
             }
