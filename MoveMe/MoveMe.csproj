@@ -74,11 +74,16 @@
     <Compile Include="Entities\ButtonLeft.cs" />
     <Compile Include="Entities\ButtonJump.cs" />
     <Compile Include="Entities\Flag.cs" />
+    <Compile Include="Entities\Joystick.cs" />
     <Compile Include="Entities\PhysicsEngine.cs" />
     <Compile Include="Entities\Player.cs" />
     <Compile Include="Entities\Swipe\TouchScreenAnalogStick.cs" />
     <Compile Include="Entities\Swipe\TouchScreenInput.cs" />
+    <Compile Include="GameScene2.cs" />
     <Compile Include="GameScene1.cs" />
+    <Compile Include="Joystick\ColoredCircleSprite.cs" />
+    <Compile Include="Joystick\SneakyJoystickControl.cs" />
+    <Compile Include="Joystick\SneakyJoystickControlSkinnedBase.cs" />
     <Compile Include="Program.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -179,6 +184,12 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\Content\images\jumpButtonLarge.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\Content\control\joystick_thumb.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\Content\control\joystick_background.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

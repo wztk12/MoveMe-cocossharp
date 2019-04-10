@@ -7,7 +7,7 @@ namespace MoveMe
 {
     public class EndScene : CCScene
     {
-        string statistics, time, accuracy, actualCoinsCollected, nextLevel;
+        string statistics, time, accuracy, actualCoinsCollected, nextLevel, currentLevel;
         decimal hits;
         CCSprite navButton;
         CCDirector director;
@@ -28,8 +28,15 @@ namespace MoveMe
             statistics = "Time: " + time + "\n" + "Accuracy: " + accuracy + "\n" + "Touches: " + touches + "\n" 
                  + "Misses: " + misses + "\n" + "Deaths: " + deaths + "\n" + "Distance travelled: " + Math.Round(distance, 2) + "\n"
                  + "Coins Collected: " + actualCoinsCollected + "\n";
-           
-            File.AppendAllText(path, "Level 1\n" + statistics);
+            if (nextLevel == "GameScene1")
+            {
+                currentLevel = "Level 1\n";
+            }
+            else
+            {
+                currentLevel = "Level 2\n";
+            }
+            File.AppendAllText(path, currentLevel + statistics);
             CCLayerColor layer = new CCLayerColor(CCColor4B.Aquamarine);
             CCLabel label = new CCLabel(statistics, "arial", 22);
             label.Color = CCColor3B.Black;
@@ -44,6 +51,7 @@ namespace MoveMe
             layer.AddEventListener(touchListener);
         }
 
+        
         void OnTouchesBegan(List<CCTouch> touches, CCEvent touchEvent)
         {
             if (touches.Count > 0)
