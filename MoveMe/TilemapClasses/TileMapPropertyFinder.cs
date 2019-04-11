@@ -19,8 +19,8 @@ namespace MoveMe.TilemapClasses
 			int tileDimension = (int)tileMap.TileTexelSize.Width;
 
 			// Find out how many rows and columns are in our tile map
-			int numberOfColumns = (int)tileMap.MapDimensions.Size.Width;
-			int numberOfRows = (int)tileMap.MapDimensions.Size.Height;
+			int numberOfColumns = tileMap.MapDimensions.Column;
+			int numberOfRows = tileMap.MapDimensions.Row;
 
 			// Tile maps can have multiple layers, so let's loop through all of them:
 			foreach (CCTileMapLayer layer in tileMap.TileLayersContainer.Children)
