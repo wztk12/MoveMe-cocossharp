@@ -16,7 +16,8 @@ namespace MoveMe
         CCLayer gameplayLayer, hudLayer;
         CCWindow mainWindow;
         CCDirector director;
-        int time;
+        CCLabel hintLabel;
+        decimal time;
         int coinsCollected = 0;
         int deaths;
         int touchCounter;
@@ -33,6 +34,7 @@ namespace MoveMe
             coinCounter.Color = CCColor3B.Black;
             CreateLayers();
             Schedule(WorldLogic);
+
         }
 
         private void CreateLayers()
@@ -52,17 +54,22 @@ namespace MoveMe
             gameplayLayer.AddChild(player);
             hudLayer = new CCLayer();
             this.AddChild(hudLayer);
+            hintLabel = new CCLabel("Method 4: Hold touch anywhere in the direction away from the player \nto move in that direction.", "arial", 22);
+            hintLabel.Position = new CCPoint(hintLabel.ContentSize.Center.X + 10, 220);
+            hintLabel.Color = CCColor3B.Black;
+            hudLayer.AddChild(hintLabel);
             AddEventListener(touchListener, hudLayer);
             buttonJumpLarge.sprite.Position = new CCPoint(190, 40);
             hudLayer.AddChild(buttonJumpLarge.sprite);
             coinCounter.Position = new CCPoint(30, 200);
             hudLayer.AddChild(coinCounter);
-            Schedule(UpdateTimer, 1f);
+            Schedule(UpdateTimer, 0.1f);
         }
 
         void WorldLogic(float seconds)
         {
 
+            if (ContentSize.Center.X < player.PositionX) hintLabel.Text = "";
             engine.Gravity(seconds, player);
             CCPoint positionBeforeCollision = player.Position;
             CCPoint reposition = CCPoint.Zero;
@@ -119,7 +126,7 @@ namespace MoveMe
 
         void UpdateTimer(float seconds)
         {
-            time += (int)seconds;
+            time += (decimal)seconds;
         }
 
         void HandleLevelFinish()
@@ -141,7 +148,7 @@ namespace MoveMe
                     }
                     else
                     {
-                        if (touch.Location.X >= player.VisibleBoundsWorldspace.Center.X)
+                        if (touch.Location.X >= Math.Min(player.PositionX, player.VisibleBoundsWorldspace.Center.X))
                         {
                             player.velocityX = 30;
                             player.direction = "right";

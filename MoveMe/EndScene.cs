@@ -13,12 +13,12 @@ namespace MoveMe
         CCDirector director;
         CCWindow mainWindow;
         
-        public EndScene(CCWindow mainWindow, CCDirector director, string nextLevel, int completionTime, decimal touches, decimal misses, int deaths, float distance, string coinsCollected) : base(mainWindow)
+        public EndScene(CCWindow mainWindow, CCDirector director, string nextLevel, decimal completionTime, decimal touches, decimal misses, int deaths, float distance, string coinsCollected) : base(mainWindow)
         {
             this.nextLevel = nextLevel;
             this.director = director;
             this.mainWindow = mainWindow;
-            time = completionTime.ToString() + " s";
+            time = Math.Round(completionTime, 1) + " s";
             hits = touches - misses;
             actualCoinsCollected = coinsCollected.Split(" ")[1];
             var env = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + "/MoveMe";
@@ -30,22 +30,46 @@ namespace MoveMe
                  + "Coins Collected: " + actualCoinsCollected + "\n";
             if (nextLevel == "GameScene1")
             {
-                currentLevel = "Level 1\n";
+                currentLevel = "Buttons\n";
+            }
+            else if (nextLevel == "GameScene2")
+            {
+                currentLevel = "Swipe\n";
+            }
+            else if (nextLevel == "GameScene3")
+            {
+                currentLevel = "Analog\n";
+            }
+            else if (nextLevel == "GameScene")
+            {
+                currentLevel = "Screen Position\n";
             }
             else
             {
-                currentLevel = "Level 2\n";
+                currentLevel = "Unknown\n";
             }
-            File.AppendAllText(path, currentLevel + statistics);
+
+            File.AppendAllText(path, currentLevel + statistics + DateTime.Now + "\n\n");
             CCLayerColor layer = new CCLayerColor(CCColor4B.Aquamarine);
             CCLabel label = new CCLabel(statistics, "arial", 22);
             label.Color = CCColor3B.Black;
             this.AddChild(layer);
             label.Position = layer.VisibleBoundsWorldspace.Center;
             layer.AddChild(label);
+   
             navButton = new CCSprite("images/navButton.png");
             navButton.Position = new CCPoint(190, 30);
-            layer.AddChild(navButton);
+            if (nextLevel != "GameScene")
+            {
+                layer.AddChild(navButton);
+            }
+            else
+            {
+                CCLabel thanks = new CCLabel("Thank you for taking part in the study!", "arial", 22);
+                thanks.Position = navButton.Position;
+                thanks.Color = CCColor3B.Blue;
+                layer.AddChild(thanks);
+            }
             var touchListener = new CCEventListenerTouchAllAtOnce();
             touchListener.OnTouchesBegan = OnTouchesBegan;
             layer.AddEventListener(touchListener);
@@ -61,11 +85,6 @@ namespace MoveMe
                     if (nextLevel == "GameScene1")
                     {
                         var scene = new GameScene1(mainWindow, director);
-                        director.ReplaceScene(scene);
-                    }
-                    else if(nextLevel == "GameScene")
-                    {
-                        var scene = new GameScene(mainWindow, director);
                         director.ReplaceScene(scene);
                     }
                     else if (nextLevel == "GameScene2")

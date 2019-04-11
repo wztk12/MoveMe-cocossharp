@@ -17,13 +17,14 @@ namespace MoveMe
         CCLayer gameplayLayer, hudLayer;
         CCWindow mainWindow;
         CCDirector director;
-        int time;
+        decimal time;
         int coinsCollected = 0;
         decimal touchCounter;
         decimal missedCounter;
         int deaths;
         CCLabel coinCounter;
         static string staticCoinString;
+        CCLabel hintLabel;
 
         public GameScene(CCWindow mainWindow, CCDirector director) : base(mainWindow)
         {
@@ -31,7 +32,8 @@ namespace MoveMe
             this.mainWindow = mainWindow;
             staticCoinString = "/" + engine.coins;
             coinCounter = new CCLabel("Coins: " + coinsCollected + staticCoinString, "arial", 22);
-            coinCounter.Color = CCColor3B.Orange;
+            coinCounter.Color = CCColor3B.Black;
+
             CreateLayers();
             Schedule(WorldLogic);
         }
@@ -53,7 +55,10 @@ namespace MoveMe
             gameplayLayer.AddChild(player);
             hudLayer = new CCLayer();
             this.AddChild(hudLayer);
-            
+            hintLabel = new CCLabel("Method 1: Hold direction buttons to move, press middle button to jump.", "arial", 22);
+            hintLabel.Position = new CCPoint(hintLabel.ContentSize.Center.X+10, 220);
+            hintLabel.Color = CCColor3B.Black;
+            hudLayer.AddChild(hintLabel);
             buttonLeft.sprite.Position = new CCPoint(155, 40);
             hudLayer.AddChild(buttonLeft.sprite);
 
@@ -67,12 +72,13 @@ namespace MoveMe
             hudLayer.AddChild(coinCounter);
 
             AddEventListener(touchListener, hudLayer);
-            Schedule(UpdateTimer, 1f);
+            Schedule(UpdateTimer, 0.1f);
         }
 
 
         void WorldLogic(float seconds)
         {
+            if (ContentSize.Center.X < player.PositionX) hintLabel.Text = "";
             engine.Gravity(seconds, player);
             CCPoint positionBeforeCollision = player.Position;
             CCPoint reposition = CCPoint.Zero;
@@ -158,7 +164,7 @@ namespace MoveMe
 
         void UpdateTimer(float seconds)
         {
-            time += (int)seconds;
+            time += (decimal)seconds;
         }
 
        void HandleLevelFinish()

@@ -17,11 +17,12 @@ namespace MoveMe
         TouchScreenInput touchScreen;
         CCWindow mainWindow;
         CCDirector director;
-        int time;
+        decimal time;
         int coinsCollected = 0;
         int deaths;
         CCLabel coinCounter;
         static string staticCoinString;
+        CCLabel hintLabel;
 
         public GameScene1(CCWindow mainWindow, CCDirector director) : base(mainWindow)
         {
@@ -51,16 +52,20 @@ namespace MoveMe
             touchScreen = new TouchScreenInput(gameplayLayer, buttonJumpLarge, player);
             hudLayer = new CCLayer();
             this.AddChild(hudLayer);
+            hintLabel = new CCLabel("Method 2: Swipe in a direction to move, press button to jump.", "arial", 22);
+            hintLabel.Position = new CCPoint(hintLabel.ContentSize.Center.X + 10, 220);
+            hintLabel.Color = CCColor3B.Black;
+            hudLayer.AddChild(hintLabel);
             buttonJumpLarge.sprite.Position = new CCPoint(190, 40);
             hudLayer.AddChild(buttonJumpLarge.sprite);
             coinCounter.Position = new CCPoint(30, 200);
             hudLayer.AddChild(coinCounter);
-            Schedule(UpdateTimer, 1f);
+            Schedule(UpdateTimer, 0.1f);
         }
 
         void WorldLogic(float seconds)
         {
-            
+            if (ContentSize.Center.X < player.PositionX) hintLabel.Text = "";
             engine.Gravity(seconds, player);
             CCPoint positionBeforeCollision = player.Position;
             CCPoint reposition = CCPoint.Zero;
@@ -127,7 +132,7 @@ namespace MoveMe
 
         void UpdateTimer(float seconds)
         {
-            time += (int)seconds;
+            time += (decimal)seconds;
         }
 
        void HandleLevelFinish()

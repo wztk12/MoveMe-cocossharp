@@ -19,11 +19,12 @@ namespace MoveMe
         CCWindow mainWindow;
         CCDirector director;
         CCDrawNode drawNode = new CCDrawNode();
-        int time;
+        decimal time;
         int coinsCollected = 0;
         int deaths;
         CCLabel coinCounter;
         static string staticCoinString;
+        CCLabel hintLabel;
 
         public GameScene2(CCWindow mainWindow, CCDirector director) : base(mainWindow)
         {
@@ -55,14 +56,19 @@ namespace MoveMe
             joystick = new SneakyJoystickControlSkinnedBase(drawNode);
             joystick.AddListener();
             hudLayer.AddChild(joystick);
+            hintLabel = new CCLabel("Method 3: Move analog stick in any direction to move.", "arial", 22);
+            hintLabel.Position = new CCPoint(hintLabel.ContentSize.Center.X + 10, 220);
+            hintLabel.Color = CCColor3B.Black;
+            hudLayer.AddChild(hintLabel);
             joystick.Position = new CCPoint(190, 40);
             coinCounter.Position = new CCPoint(30, 200);
             hudLayer.AddChild(coinCounter);
-            Schedule(UpdateTimer, 1f);
+            Schedule(UpdateTimer, 0.1f);
         }
 
         void WorldLogic(float seconds)
         {
+            if (ContentSize.Center.X < player.PositionX) hintLabel.Text = "";
             engine.Gravity(seconds, player);
             CCPoint positionBeforeCollision = player.Position;
             CCPoint reposition = CCPoint.Zero;
@@ -143,7 +149,7 @@ namespace MoveMe
 
         void UpdateTimer(float seconds)
         {
-            time += (int)seconds;
+            time += (decimal)seconds;
         }
 
        void HandleLevelFinish()

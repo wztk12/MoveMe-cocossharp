@@ -76,7 +76,7 @@ namespace MoveMe.Entities
 
                 var dot = CCPoint.Dot(velocity, reposition);
                 // falling into the collision, rather than out of
-                if (dot < 0 && reposition.X<1 && reposition.Y<1 && reposition.Y>-1 && reposition.X>-1)
+                if (dot < 0 && reposition.X<5 && reposition.Y<5 && reposition.Y>-5 && reposition.X>-5)
                 {
                     velocity -= reposition * dot;
 
