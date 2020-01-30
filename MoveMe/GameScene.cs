@@ -53,7 +53,7 @@ namespace MoveMe
             joystick.AddListener();
             hudLayer.AddChild(joystick);
             hintLabel = new CCLabel(player.velocityX.ToString() + " , " + player.velocityY.ToString(), "arial", 22);
-            hintLabel.Position = new CCPoint(hintLabel.ContentSize.Center.X + 10, 220);
+            hintLabel.Position = new CCPoint(gameplayLayer.ContentSize.Center.X, 220);
             hintLabel.Color = CCColor3B.Black;
             hudLayer.AddChild(hintLabel);
             joystick.Position = new CCPoint(190, 40);
